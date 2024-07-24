@@ -1,0 +1,37 @@
+.nav {
+  /* position: absolute; */
+  background-color: white;
+  /* width: 230px; */
+  height: 100vh;
+  float: left;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  transition: width 0.3s;
+}
+.navOpen {
+  width: 230px;
+}
+.navClosed {
+  width: 62px;
+}
+.links {
+  padding: 10px;
+}
+.links li {
+  padding: 10px;
+}
+.links li .link {
+  color: black;
+  font-weight: 400;
+}
+.links li .link span {
+  padding-left: 10px;
+}
+.links li:hover {
+  background-color: #e8f7f7;
+}
+.links li:hover .link {
+  color: #6ac045;
+}
+.links li:active {
+  background-color: #e8f7f7;
+}

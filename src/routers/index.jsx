@@ -4,13 +4,10 @@ import Promotion from "../pages/admin/promotion";
 import ContactList from "../pages/admin/contactList";
 import Payouts from "../pages/admin/payouts";
 import Reports from "../pages/admin/reports";
-import Subscription from "../pages/admin/subscription";
-import ConversionSetup from "../pages/admin/conversionSetup";
 import AdminRoot from "../pages/admin/adminRoot";
 import MyTeam from "../pages/admin/myTeam";
 import Login from "../pages/admin/login";
 import NoPage from "../pages/noPage";
-import MyHome from '../pages/admin/myHome'
 
 export const routes = [
   {
@@ -41,14 +38,7 @@ export const routes = [
         path: "/admin/reports",
         element: <Reports />,
       },
-      {
-        path: "/admin/subscription",
-        element: <Subscription />,
-      },
-      {
-        path: "/admin/consetup",
-        element: <ConversionSetup />,
-      },
+
       {
         path: "/admin/about",
         element: <Dashboard />,
@@ -60,10 +50,6 @@ export const routes = [
       {
         path: "/admin/login",
         element: <Login />,
-      },
-      {
-        path: "/admin/myHome",
-        element: <MyHome />,
       },
     ],
   },

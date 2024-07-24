@@ -8,19 +8,28 @@ import MultipleStopIcon from "@mui/icons-material/MultipleStop";
 import ExploreIcon from "@mui/icons-material/Explore";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useState } from "react";
+import Navbar from "../../layout/navbar";
 
 function Header() {
   let [mode, setMode] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
   function changeMode(e) {
     setMode(!mode);
     if (!mode) {
       e.target.classList.replace("light", "dark");
       document.body.style.backgroundColor = "black";
       header.style.backgroundColor = "black";
+      setMode(mode);
     } else {
       e.target.classList.replace("dark", "light");
       document.body.style.backgroundColor = "white";
+      setMode(!mode);
     }
+  }
+
+  function toggleNavbar() {
+    setIsNavbarOpen(!isNavbarOpen);
   }
   return (
     <>
@@ -28,13 +37,12 @@ function Header() {
         <div className="container-fluid">
           <div className={style.row}>
             <div className={style.barAndLogo}>
-              <button className={style.iconBtn}>
+              <button className={style.iconBtn} onClick={toggleNavbar}>
                 <MenuIcon className={style.barIcon} />
               </button>
               <Link to="/admin">
                 <img className={style.logo} src={logo} alt="" />
               </Link>
-              {/* <img src={logo} alt="" /> */}
             </div>
 
             <div className={style.iconAndBtns}>
@@ -71,6 +79,8 @@ function Header() {
           </div>
         </div>
       </header>
+      <Navbar isNavbarOpen={isNavbarOpen} />
+      {/* {isNavbarOpen && <Navbar />} */}
     </>
   );
 }
