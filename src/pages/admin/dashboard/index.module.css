@@ -1,3 +1,66 @@
-.dash {
-  background-color: aqua;
+.dashboardPage {
+  padding: 30px 100px;
+}
+.dashboardPage .dash {
+  margin-bottom: 40px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.dashboardPage .user {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.dashboardPage .user .about .image {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+.dashboardPage .user .about .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dashboardPage .user .about {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.dashboardPage .user .about .title h6 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.dashboardPage .user .about .title p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #717171;
+}
+.dashboardPage .user .orgaBtn button {
+  padding: 8px 12px;
+  background-color: white;
+  border: 1px solid rgb(172, 170, 170);
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 5px;
+}
+.dashboardPage .user .orgaBtn button:hover {
+  background-color: #e8f7f7;
+}
+.dashboardPage .user .orgaBtn button span {
+  border: 1px dashed grey;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  color: #717171;
+  background-color: #ededed;
+  margin-right: 5px;
 }
