@@ -8,6 +8,7 @@ import AdminRoot from "../pages/admin/adminRoot";
 import MyTeam from "../pages/admin/myTeam";
 import Login from "../pages/admin/login";
 import NoPage from "../pages/noPage";
+import Register from "../pages/admin/register";
 
 export const routes = [
   {
@@ -56,5 +57,9 @@ export const routes = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: < Register/>,
   },
 ];

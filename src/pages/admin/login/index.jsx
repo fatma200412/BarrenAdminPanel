@@ -8,12 +8,17 @@ import {
   Field,
   // FieldProps,
 } from "formik";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../redux/slices/adminSlice";
+import { Link, useNavigate } from "react-router-dom";
 
-// interface MyFormValues {
-//   firstName: string;
-// }
 function Login() {
-  // const initialValues  = { firstName: "" };
+  const initialValues = { email: "", password: "" };
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  console.log(isLogin);
   return (
     <div className={style.loginPages}>
       <div className={style.left}>
@@ -25,20 +30,48 @@ function Login() {
         </div>
       </div>
       <div className={style.right}>
-        <div>
-          <h1>LOgin</h1>
+        <div className={style.signUp}>
+          <p>
+            New to Barren? <Link to="/register">Sign Up</Link>{" "}
+          </p>
+        </div>
+        <div className={style.forms}>
+          <h1>Sign in to Barren</h1>
           <Formik
-            initialValues={{ firstName: "" }}
+            initialValues={initialValues}
             onSubmit={(values, actions) => {
-              console.log({ values, actions });
-              alert(JSON.stringify(values, null, 2));
-              actions.setSubmitting(false);
+              console.log(values.email);
+              axios("https://669b5625276e45187d352b89.mockapi.io/users").then(
+                (res) => {
+                  let data = res.data;
+                  let userFound = false;
+                  for (let user of data) {
+                    if (
+                      user.email == values.email &&
+                      user.password == values.password
+                    ) {
+                      userFound = true;
+                      dispatch(login(true));
+                      navigate("/admin");
+                      break;
+                    }
+                    if (!userFound) {
+                      console.log("sifre veya istifadeci adi yalnisdir");
+                    }
+                  }
+                }
+              );
             }}
           >
             <Form>
-              <label htmlFor="firstName">First Name</label>
-              <Field id="firstName" name="firstName" placeholder="First Name" />
-              <button type="submit">Submit</button>
+              <label htmlFor="email">Your Email</label>
+              <br />
+              <Field id="email" name="email" placeholder="Your Email" />
+              <br />
+              <label htmlFor="email">Password</label> <br />
+              <Field id="password" name="password" placeholder="Password" />
+              <br />
+              <button type="submit">Login</button>
             </Form>
           </Formik>
         </div>
