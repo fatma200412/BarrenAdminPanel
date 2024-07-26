@@ -47,14 +47,14 @@ export const routes = [
         path: "/admin/myteam",
         element: <MyTeam />,
       },
-      {
-        path: "/admin/login",
-        element: <Login />,
-      },
     ],
   },
   {
     path: "*",
     element: <NoPage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ];

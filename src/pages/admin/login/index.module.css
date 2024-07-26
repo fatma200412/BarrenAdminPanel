@@ -1,3 +1,20 @@
-.login {
-  background-color: violet;
+.loginPages {
+  display: flex;
+  height: 100vh;
+}
+.loginPages .left {
+  width: 500px;
+  background-image: url("https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/images/sign_bg.jpg");
+  padding: 50px;
+  /* flex: 1; */
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+}
+
+.loginPages .left .title h1 {
+  font-size: 30px;
+  font-weight: 600;
+  text-decoration: none solid rgb(255, 255, 255);
+  color: white;
 }

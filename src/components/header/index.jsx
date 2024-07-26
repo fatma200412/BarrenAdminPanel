@@ -7,10 +7,14 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MultipleStopIcon from "@mui/icons-material/MultipleStop";
 import ExploreIcon from "@mui/icons-material/Explore";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Navbar from "../../layout/navbar";
+import { AdminAuth } from "../../context/adminAuth";
 
 function Header() {
+  const user = useContext(AdminAuth);
+  console.log(user);
+
   let [mode, setMode] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 

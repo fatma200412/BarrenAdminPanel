@@ -1,3 +1,32 @@
-.events {
-  background-color: aquamarine;
+.eventsPages {
+  padding: 30px 100px;
+  height: 200vh;
+}
+.eventsPages .events {
+  margin-bottom: 40px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.eventsPages .eventsAndSearch {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.eventsPages .eventsAndSearch .title h5 {
+  font-size: 17.5px;
+  font-weight: 500;
+  text-decoration: none solid rgb(33, 37, 41);
+  margin-bottom: 25px;
+}
+.eventsPages .eventsAndSearch .searchAndBtns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon {
+  border: 1px solid grey;
+  padding: 5px;
+}
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon .phoneIcon{
+  
 }
