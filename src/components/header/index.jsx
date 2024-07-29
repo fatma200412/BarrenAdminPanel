@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./index.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../../assets/images/header/logo-icon.svg";
@@ -7,16 +7,60 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MultipleStopIcon from "@mui/icons-material/MultipleStop";
 import ExploreIcon from "@mui/icons-material/Explore";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../../layout/navbar";
 import { AdminAuth } from "../../context/adminAuth";
+import axios from "axios";
+import { Modal } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/slices/adminSlice";
+
+const ModalStyle = {
+  position: "absolute",
+  top: "150px",
+  right: "0",
+  transform: "translate(-50%, -50%)",
+  width: 250,
+  bgcolor: "background.paper",
+  // border: "2px solid #000",
+  boxShadow: 24,
+  // p: 4,
+  height: "auto",
+  // display: "flex",
+  // flexDirection: "column",
+  // alignItems: "center",
+};
 
 function Header() {
-  const user = useContext(AdminAuth);
+  const user = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
   console.log(user);
 
-  let [mode, setMode] = useState(false);
+  const [mode, setMode] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  // const [profileInfo, setProfileInfo] = useState({});
+  // const [isModalOpen, setIsModalOpen] = useState(false); // Modal durumu
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  // console.log(profileInfo.id);
+
+  const navigate = useNavigate();
+  // console.log(profileInfo);
+
+  // useEffect(() => {
+  //   axios(`https://669b5625276e45187d352b89.mockapi.io/users/${user.id}`)
+  //     .then((res) => {
+  //       setProfileInfo(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching profile info:", error);
+  //     });
+  // }, []);
 
   function changeMode(e) {
     setMode(!mode);
@@ -35,6 +79,20 @@ function Header() {
   function toggleNavbar() {
     setIsNavbarOpen(!isNavbarOpen);
   }
+  // function openModal() {
+  //   setIsModalOpen(true);
+  // }
+
+  // function closeModal() {
+  //   setIsModalOpen(false);
+  // }
+
+  function handleLogout() {
+    // localStorage.removeItem("isLogin");
+    dispatch(logout());
+    navigate("/login");
+  }
+
   return (
     <>
       <header className={style.header}>
@@ -69,8 +127,19 @@ function Header() {
                 </button>
               </div>
               <div className={style.btns}>
-                <button className={`${style.btns} ${style.user} `}>
-                  <AccountCircleIcon style={{ fontSize: "20px" }} />
+                <button
+                  className={`${style.btns} ${style.user} `}
+                  onClick={handleOpen}
+                >
+                  {user.profilImage ? (
+                    <img
+                      src={user.profilImage}
+                      alt="profile"
+                      className={style.profileImage}
+                    />
+                  ) : (
+                    <AccountCircleIcon />
+                  )}
                 </button>
                 <button
                   className={`${style.btns} ${style.light}`}
@@ -85,6 +154,54 @@ function Header() {
       </header>
       <Navbar isNavbarOpen={isNavbarOpen} />
       {/* {isNavbarOpen && <Navbar />} */}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={ModalStyle}>
+            <Box className={style.title}>
+              <img
+                src={user.profilImage}
+                alt="Profile"
+                className={style.profileImageLarge}
+              />
+
+              <Typography
+                variant="h6"
+                component="h2"
+                className={style.profileName}
+              >
+                {user.firstName} {user.lastName}
+              </Typography>
+
+              <p className={style.profileEmail}>{user.email}</p>
+            </Box>
+
+            <div className={style.btnModal}>
+              <button
+                onClick={() => navigate("/myProfile")}
+                className={style.btn}
+              >
+                My Profile
+              </button>
+              <button onClick={handleLogout} className={style.btn}>
+                Sign Out
+              </button>
+            </div>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 }

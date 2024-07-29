@@ -39,10 +39,14 @@
 }
 .header .iconAndBtns .btns {
   border-radius: 50%;
-  padding: 8px;
-  font-size: 12px;
+  /* padding: 8px; */
+  /* font-size: 12px; */
   border: none;
-  margin-right: 10px;
+  margin: 0 10px;
+  display: flex;
+}
+.header .iconAndBtns .btns .user {
+  /* margin-top: 2px; */
 }
 .header .iconAndBtns .calendar {
   background-color: #6ac045;
@@ -56,4 +60,70 @@
 .header .iconAndBtns .light {
   background-color: #e8f7f7;
   color: grey;
+  padding: 15px;
+}
+.header .iconAndBtns .btns .user .profileImage {
+  width: 50px; /* Profil resminin genişliği */
+  height: 50px; /* Profil resminin yüksekliği */
+  border-radius: 50%; /* Profil resmini daire yapar */
+  object-fit: cover; /* Resmin kapsayıcıya sığmasını sağlar */
+  cursor: pointer; /* Fare imlecini el simgesine dönüştürür */
+  /* border: 2px solid #ffffff; Profil resmine beyaz kenarlık ekler */
+}
+.title {
+  border-bottom: 1px solid grey;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+}
+
+.profileImageLarge {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  margin-bottom: 9px;
+}
+
+.profileName {
+  color: #212529;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(33, 37, 41);
+}
+.profileEmail {
+  color: #686868;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none solid rgb(104, 104, 104);
+  margin-bottom: 20px;
+}
+.btnModal {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  align-items: start;
+  padding: 15px;
+}
+.btnModal .btn {
+  border: none;
+  background-color: white;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(106, 192, 69);
+  padding: 10px;
+}
+.btnModal .btn:hover {
+  color: #6ac045;
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import logo from "../../../assets/images/login/sign-logo.svg";
 import style from "./index.module.css";
 import {
   Formik,
@@ -8,6 +9,9 @@ import {
   Field,
   // FieldProps,
 } from "formik";
+import { Link, useNavigate } from "react-router-dom";
+import Grid from "@mui/system/Unstable_Grid";
+
 function Register() {
   const initialValues = {
     firstName: "",
@@ -15,11 +19,14 @@ function Register() {
     email: "",
     password: "",
   };
+  const navigate = useNavigate();
   return (
     <>
-      <div className={style.loginPages}>
+      <div className={style.registerPages}>
         <div className={style.left}>
-          <div className={style.logo}>{/* <img src={logo} alt="" /> */}</div>
+          <div className={style.logo}>
+            <img src={logo} alt="" />
+          </div>
           <div className={style.title}>
             <h1>
               The Easiest Way to Create Events and Sell More Tickets Online
@@ -27,8 +34,17 @@ function Register() {
           </div>
         </div>
         <div className={style.right}>
-          <div>
-            <h1>Register</h1>
+          <div className={style.signIn}>
+            <p>
+              Already have an account?
+              <Link to="/login" className={style.link}>
+                Sign Ip
+              </Link>{" "}
+            </p>
+          </div>
+          <div className={style.forms}>
+            <h1>Sign up to Barren</h1>
+
             <Formik
               initialValues={initialValues}
               onSubmit={(values, actions) => {
@@ -41,29 +57,74 @@ function Register() {
                   .then((res) => {
                     if (res.status == 200) {
                       alert("qey tamamlandir");
-                      navigator("/");
+                      navigate("/");
+                      actions.resetForm();
                     }
+                    navigate("/");
+                    actions.resetForm();
                   });
               }}
             >
-              <Form>
-                <label htmlFor="firstName">First Name</label>
-                <Field
-                  id="firstName"
-                  name="firstName"
-                  placeholder="First Name"
-                />
-                <br />
-                <label htmlFor="lastName">Last Name</label>
-                <Field id="lastName" name="lastName" placeholder="Last Name" />
-                <br />
-                <label htmlFor="email">Your Email</label>
-                <Field id="email" name="email" placeholder="Your Email" />
-                <br />
-                <label htmlFor="email">Password</label>
-                <Field id="password" name="password" placeholder="Password" />
-                <br />
-                <button type="submit">Submit</button>
+              <Form className={style.form}>
+                <Grid container spacing={3}>
+                  <Grid xs={12} md={6}>
+                    <label htmlFor="firstName" className={style.label}>
+                      First Name*
+                    </label>
+                    <Field
+                      id="firstName"
+                      name="firstName"
+                      placeholder="First Name"
+                      className={style.inp}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={6}>
+                    <label htmlFor="lastName" className={style.label}>
+                      Last Name*
+                    </label>
+                    <Field
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Last Name"
+                      className={style.inp}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="email" className={style.label}>
+                      Your Email*
+                    </label>
+                    <Field
+                      id="email"
+                      name="email"
+                      placeholder="Your Email"
+                      className={style.inp}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="email" className={style.label}>
+                      Password*
+                    </label>
+                    <Field
+                      id="password"
+                      name="password"
+                      placeholder="Password"
+                      className={style.inp}
+                    />
+                  </Grid>
+                </Grid>
+
+                <button type="submit">Sign Up</button>
+                <p>
+                  By clicking "Sign up", you agree to Barren{" "}
+                  <Link to="/register" className={style.link}>
+                    Terms & Conditions
+                  </Link>
+                  and have read the{" "}
+                  <Link to="/register" className={style.link}>
+                    Privacy Policy
+                  </Link>{" "}
+                  .
+                </p>
               </Form>
             </Formik>
           </div>

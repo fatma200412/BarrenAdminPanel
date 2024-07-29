@@ -9,6 +9,8 @@ import MyTeam from "../pages/admin/myTeam";
 import Login from "../pages/admin/login";
 import NoPage from "../pages/noPage";
 import Register from "../pages/admin/register";
+import ForgetPassword from "../pages/forgetPassword";
+import MyProfile from "../pages/admin/myProfile";
 
 export const routes = [
   {
@@ -51,15 +53,29 @@ export const routes = [
     ],
   },
   {
+    path: "/myProfile",
+    element: <MyProfile />,
+  },
+  {
     path: "*",
     element: <NoPage />,
   },
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
+  },
+  {
+    path: "/forgetpass",
+    element: <ForgetPassword />,
   },
   {
     path: "/register",
-    element: < Register/>,
+    element: <Register />,
   },
 ];

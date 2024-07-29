@@ -31,15 +31,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { LineChart } from "@mui/x-charts/LineChart";
-// import { LineChart } from "@mui/x-charts";
-// import {
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from "recharts";
+import { useDispatch, useSelector } from "react-redux";
+
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -100,6 +93,9 @@ const data = [
 ];
 
 function Dashboard() {
+  const user = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
+  console.log(user);
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
   const handleOpen = () => setOpen(true);
@@ -146,13 +142,12 @@ function Dashboard() {
         <div className={style.user}>
           <div className={style.about}>
             <div className={style.image}>
-              <img
-                src="https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/images/profile-imgs/img-13.jpg"
-                alt="user"
-              />
+              <img src={user.profilImage} alt="user" />
             </div>
             <div className={style.title}>
-              <h6>John Doe</h6>
+              <h6>
+                {user.firstName} {user.lastName}
+              </h6>
               <p>My Organisation</p>
             </div>
           </div>

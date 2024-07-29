@@ -12,6 +12,8 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../redux/slices/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
   const initialValues = { email: "", password: "" };
@@ -32,7 +34,10 @@ function Login() {
       <div className={style.right}>
         <div className={style.signUp}>
           <p>
-            New to Barren? <Link to="/register">Sign Up</Link>{" "}
+            New to Barren?{" "}
+            <Link to="/register" className={style.link}>
+              Sign Up
+            </Link>{" "}
           </p>
         </div>
         <div className={style.forms}>
@@ -51,7 +56,7 @@ function Login() {
                       user.password == values.password
                     ) {
                       userFound = true;
-                      dispatch(login(true));
+                      dispatch(login(user));
                       navigate("/admin");
                       break;
                     }
@@ -63,15 +68,37 @@ function Login() {
               );
             }}
           >
-            <Form>
-              <label htmlFor="email">Your Email</label>
+            <Form className={style.form}>
+              <label htmlFor="email" className={style.label}>
+                Your Email*
+              </label>
               <br />
-              <Field id="email" name="email" placeholder="Your Email" />
+              <Field
+                id="email"
+                name="email"
+                placeholder="Your Email"
+                className={style.inp}
+              />
               <br />
-              <label htmlFor="email">Password</label> <br />
-              <Field id="password" name="password" placeholder="Password" />
+              <div className={style.labelAndForget}>
+                <label htmlFor="password" className={style.label}>
+                  Password*
+                </label>
+                <Link to="/forgetpass" className={style.forgetPass}>
+                  Forget Password?
+                </Link>
+              </div>
+ 
+              <Field
+                id="password"
+                name="password"
+                placeholder="Password"
+                className={style.inp}
+              />
               <br />
-              <button type="submit">Login</button>
+              <button type="submit">
+                Sign In <FontAwesomeIcon icon={faRightToBracket} />
+              </button>
             </Form>
           </Formik>
         </div>
