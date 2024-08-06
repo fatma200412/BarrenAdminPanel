@@ -1,3 +1,109 @@
-.payouts {
-  background-color: blue;
+.eventsPages {
+  padding: 30px 100px;
+  height: 200vh;
+  background-color: #f5f7f9;
+}
+.eventsPages .events {
+  margin-bottom: 40px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.eventsPages .eventsAndSearch {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.eventsPages .eventsAndSearch .title h5 {
+  font-size: 17.5px;
+  font-weight: 500;
+  text-decoration: none solid rgb(33, 37, 41);
+  margin-bottom: 25px;
+}
+.eventsPages .eventsAndSearch .searchAndBtns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon {
+  border: 1px solid rgb(212, 205, 205);
+  padding: 10px;
+}
+
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon .searchIcon {
+  color: rgb(162, 159, 159);
+}
+.eventsPages .eventsAndSearch .searchAndBtns .btns button {
+  margin-right: 5px;
+  padding: 15px 25px;
+  background-color: #6ac045;
+  border: none;
+  color: white;
+  text-align: center;
+}
+.eventsPages .dataTables {
+  margin-top: 0 !important;
+}
+.cancel,
+.add {
+  margin: 10px;
+  padding: 14px 65px;
+  border-radius: 5px;
+}
+.cancel {
+  background-color: white;
+  border: 2px solid #c2c1c1;
+}
+.cancel:hover {
+  background-color: #e8f7f7;
+}
+.add {
+  background-color: #6ac045;
+  border: none;
+  color: white;
+}
+.add:hover {
+  background-color: #78d650;
+}
+
+.eventsPages .bankCards {
+  background-color: white;
+  padding: 30px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.eventsPages .bankCards .card {
+  border: 1px solid rgb(197, 189, 189);
+  padding: 15px 20px;
+  padding-right: 100px;
+  background-color: #f9f9f9;
+}
+.eventsPages .bankCards .card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 8px;
+}
+.eventsPages .bankCards .card h4 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 13px;
+}
+.eventsPages .bankCards .card p {
+  color: #717171;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 13px;
+}
+.eventsPages .bankCards .card button {
+  padding: 5px;
+  background-color: white;
+  border: 1px solid rgb(197, 189, 189);
+}
+.eventsPages .bankCards .card .edit {
+  /* display: block; */
+  /* margin: 0px; */
+  margin-right: 10px;
 }

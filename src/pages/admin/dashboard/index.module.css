@@ -211,3 +211,56 @@
   border: 1px solid #6ac045;
   background-color: white;
 }
+.forms {
+  width: 35%;
+  margin: 0 auto;
+}
+.registerPages .right .forms h1 {
+  color: #212529;
+  font-size: 24px;
+  font-weight: 600;
+  text-decoration: none solid rgb(33, 37, 41);
+  font-stretch: 100%;
+  margin-bottom: 45px;
+}
+.registerPages .right .forms .form {
+  width: 100%;
+}
+.registerPages .right .forms .form .label {
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.registerPages .right .forms .form .inp {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #bfbdbd;
+  background-color: #f9f9f9;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 2px;
+}
+.form button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: #7ad254;
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none solid rgb(255, 255, 255);
+  margin: 20px 0;
+}
+.form p {
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration: none solid rgb(0, 0, 0);
+  word-spacing: 5px;
+}
+.form p .link {
+  color: #7ad254;
+  text-decoration: underline solid rgb(122, 210, 84);
+  padding: 2px;
+}

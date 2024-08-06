@@ -11,6 +11,7 @@ import NoPage from "../pages/noPage";
 import Register from "../pages/admin/register";
 import ForgetPassword from "../pages/forgetPassword";
 import MyProfile from "../pages/admin/myProfile";
+import About from "../pages/admin/about";
 
 export const routes = [
   {
@@ -44,7 +45,7 @@ export const routes = [
 
       {
         path: "/admin/about",
-        element: <Dashboard />,
+        element: <About />,
       },
       {
         path: "/admin/myteam",

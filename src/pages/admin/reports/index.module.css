@@ -1,3 +1,45 @@
-.reports {
-  background-color: brown;
+.eventsPages {
+  padding: 30px 100px;
+  height: 200vh;
+  background-color: #f5f7f9;
+}
+.eventsPages .events {
+  margin-bottom: 40px;
+  font-size: 24px;
+  font-weight: 600;
+}
+.eventsPages .eventsAndSearch {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.eventsPages .eventsAndSearch .searchAndBtns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon {
+  border: 1px solid rgb(212, 205, 205);
+  padding: 10px;
+}
+
+.eventsPages .eventsAndSearch .searchAndBtns .inputAndIcon .searchIcon {
+  color: rgb(162, 159, 159);
+}
+.eventsPages .eventsAndSearch .btns button {
+  margin-right: 5px;
+  padding: 12px 15px;
+  background-color: #6ac045;
+  border: none;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.eventsPages .eventsAndSearch .searchAndBtns .refBtn {
+  padding: 12px 18px;
+  background-color: white;
+  border: 1px solid rgb(198, 198, 198);
 }

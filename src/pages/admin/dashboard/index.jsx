@@ -32,6 +32,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+// import { LineGragh } from "../../../components/chartjs/Line";
 
 const styleModal = {
   position: "absolute",
@@ -60,19 +62,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Algeria",
-  "Argentina",
-  "Australia",
-  "Austria (Österreich)",
-  "Belgium",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 function getStyles(name, country, theme) {
   return {
     fontWeight:
@@ -97,29 +86,33 @@ function Dashboard() {
   const dispatch = useDispatch();
   console.log(user);
   const [open, setOpen] = useState(false);
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
+
+  const [formsData, setFormsData] = useState({
+    image: "",
+    name: "",
+    profileLink: "",
+    about: "",
+    email: "",
+    phone: "",
+    address: {
+      country: "",
+      city: "",
+    },
+  });
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      setFormsData((prevData) => ({
+        ...prevData,
+        image: file,
+      }));
     }
   };
-
-  const theme = useTheme();
-  const [country, setCountry] = useState([]);
-
-  const handleChangeCountry = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setCountry(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-  };
-
   const [selectEvents, setSelectEvents] = useState("");
 
   const handleChangeSelectEvents = (event) => {
@@ -130,6 +123,39 @@ function Dashboard() {
 
   const handleChangePage = (event) => {
     setPage(event.target.value);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormsData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setFormsData((prevData) => ({
+      ...prevData,
+      address: {
+        ...prevData.address,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "https://669b5625276e45187d352b89.mockapi.io/organization",
+        formsData
+      );
+      console.log(response.data);
+      // Optionally handle success (e.g., close the modal, reset form, etc.)
+      handleClose();
+    } catch (error) {
+      console.error("There was an error submitting the form:", error);
+    }
   };
 
   return (
@@ -397,6 +423,8 @@ function Dashboard() {
                 },
               ]}
             />
+
+            {/* <LineGragh /> */}
           </div>
         </div>
       </div>
@@ -459,48 +487,46 @@ function Dashboard() {
                   >
                     Avatar*
                   </Typography>
-                  <Input
-                    id="input-with-icon-adornment"
-                    type="file"
-                    onChange={handleImageChange}
+                  <TextField
+                    variant="outlined"
+                    // accept="image/*"
+                    name="image"
+                    value={formsData.image}
+                    onChange={handleInputChange}
                     style={{
-                      display: "none",
+                      margin: "8px",
+                      width: "100%",
+                      backgroundColor: "#f9f9f9",
                     }}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <CameraAltIcon style={{ margin: "auto" }} />
-                      </InputAdornment>
-                    }
                   />
-                  <label htmlFor="input-with-icon-adornment">
-                    <div
-                      style={{
-                        border: "2px dashed #bbbbbb",
-                        width: "110px",
-                        height: "110px",
-                        borderRadius: "50%",
-                        textAlign: "center",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {image ? (
-                        <img
-                          src={image}
-                          alt="uploaded"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      ) : (
-                        <CameraAltIcon style={{ color: "#bbbbbb" }} />
-                      )}
-                    </div>
-                  </label>
+
+                  <div
+                    style={{
+                      border: "2px dashed #bbbbbb",
+                      width: "110px",
+                      height: "110px",
+                      borderRadius: "50%",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {formsData.image ? (
+                      <img
+                        src={formsData.image}
+                        alt="uploaded"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    ) : (
+                      <CameraAltIcon style={{ color: "#bbbbbb" }} />
+                    )}
+                  </div>
                 </div>
 
                 <Typography
@@ -517,6 +543,9 @@ function Dashboard() {
                 </Typography>
                 <TextField
                   variant="outlined"
+                  name="name"
+                  value={formsData.name}
+                  onChange={handleInputChange}
                   style={{
                     margin: "8px",
                     width: "100%",
@@ -537,6 +566,9 @@ function Dashboard() {
                 </Typography>
                 <TextField
                   variant="outlined"
+                  name="profileLink"
+                  value={formsData.profileLink}
+                  onChange={handleInputChange}
                   style={{
                     margin: "8px",
                     width: "100%",
@@ -557,6 +589,9 @@ function Dashboard() {
                 </Typography>
                 <TextField
                   variant="outlined"
+                  name="about"
+                  value={formsData.about}
+                  onChange={handleInputChange}
                   multiline
                   rows={4}
                   style={{
@@ -582,6 +617,9 @@ function Dashboard() {
                     </Typography>
                     <TextField
                       variant="outlined"
+                      name="email"
+                      value={formsData.email}
+                      onChange={handleInputChange}
                       style={{
                         margin: "8px",
                         width: "100%",
@@ -604,6 +642,9 @@ function Dashboard() {
                     </Typography>
                     <TextField
                       variant="outlined"
+                      name="phone"
+                      value={formsData.phone}
+                      onChange={handleInputChange}
                       style={{
                         margin: "8px",
                         width: "100%",
@@ -655,6 +696,9 @@ function Dashboard() {
                       Address*
                     </Typography>
                     <TextField
+                      name="address"
+                      value={formsData.address.address}
+                      onChange={handleAddressChange}
                       variant="outlined"
                       style={{
                         margin: "8px",
@@ -677,26 +721,17 @@ function Dashboard() {
                     >
                       Country*
                     </Typography>
-                    <Select
-                      fullWidth
-                      labelId="demo-multiple-name-label"
-                      id="demo-multiple-name"
-                      multiple
-                      value={country}
-                      onChange={handleChangeCountry}
-                      input={<OutlinedInput label="Name" />}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, country, theme)}
-                        >
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <TextField
+                      name="country"
+                      value={formsData.address.country}
+                      onChange={handleAddressChange}
+                      variant="outlined"
+                      style={{
+                        margin: "8px",
+                        width: "100%",
+                        backgroundColor: "#f9f9f9",
+                      }}
+                    />
                   </Grid>
                   <Grid xs={12} md={12}>
                     <Typography
@@ -712,6 +747,9 @@ function Dashboard() {
                       City/Suburb*
                     </Typography>
                     <TextField
+                      name="country"
+                      value={formsData.address.country}
+                      onChange={handleAddressChange}
                       variant="outlined"
                       style={{
                         margin: "8px",
@@ -728,7 +766,9 @@ function Dashboard() {
                 <button onClick={handleClose} className={style.cancel}>
                   Cancel
                 </button>
-                <button className={style.add}>Add</button>
+                <button onClick={handleSubmit} className={style.add}>
+                  Add
+                </button>
               </div>
             </Box>
           </Fade>

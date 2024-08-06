@@ -18,6 +18,12 @@ function Register() {
     lastName: "",
     email: "",
     password: "",
+    image: "",
+    address: {
+      county: "",
+      city: "",
+      address: "",
+    },
   };
   const navigate = useNavigate();
   return (
@@ -108,6 +114,50 @@ function Register() {
                       id="password"
                       name="password"
                       placeholder="Password"
+                      className={style.inp}
+                    />
+                  </Grid>
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="image" className={style.label}>
+                      Profil Image*
+                    </label>
+                    <Field
+                      id="image"
+                      name="image"
+                      placeholder="Your Profil Image"
+                      className={style.inp}
+                    />
+                  </Grid>{" "}
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="county" className={style.label}>
+                      Your County*
+                    </label>
+                    <Field
+                      id="county"
+                      name="address.county"
+                      placeholder="Your County"
+                      className={style.inp}
+                    />
+                  </Grid>{" "}
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="city" className={style.label}>
+                      Your city*
+                    </label>
+                    <Field
+                      id=""
+                      name="address.city"
+                      placeholder="Your City"
+                      className={style.inp}
+                    />
+                  </Grid>{" "}
+                  <Grid xs={12} md={12}>
+                    <label htmlFor="address" className={style.label}>
+                      Your address*
+                    </label>
+                    <Field
+                      id="address"
+                      name="address.address"
+                      placeholder="Your Address"
                       className={style.inp}
                     />
                   </Grid>
