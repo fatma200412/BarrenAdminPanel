@@ -133,7 +133,7 @@ function Header() {
                 >
                   {user.profilImage ? (
                     <img
-                      src={user.profilImage}
+                      src={user.image}
                       alt="profile"
                       className={style.profileImage}
                     />
@@ -172,7 +172,7 @@ function Header() {
           <Box sx={ModalStyle}>
             <Box className={style.title}>
               <img
-                src={user.profilImage}
+                src={user.image}
                 alt="Profile"
                 className={style.profileImageLarge}
               />

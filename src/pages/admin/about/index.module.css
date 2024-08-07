@@ -14,6 +14,7 @@
   width: 50%;
   background-color: white !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  /* margin-bottom: 100px; */
 }
 
 .aboutPage .about .edit {
@@ -61,6 +62,66 @@
   font-weight: 500;
   margin-bottom: 25px;
   text-decoration: none solid rgb(113, 113, 113);
+}
+
+.aboutPage .about .desp {
+  /* padding: 0 30px; */
+  border-bottom: 1px solid #efefef;
+  margin: 30px;
+  margin-bottom: 20px;
+}
+.aboutPage .about .desp h6 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 15px;
+}
+.aboutPage .about .desp p {
+  color: #717171;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 15px;
+}
+
+.aboutPage .about .findMe {
+  border-bottom: 1px solid #efefef;
+  margin: 30px;
+}
+.aboutPage .about .findMe h2 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 10px;
+}
+.aboutPage .about .findMe .links button {
+  margin-right: 10px;
+  border-radius: 50%;
+  padding: 5px;
+  border: 1px solid #6ac045;
+  background-color: white;
+  margin-bottom: 40px;
+}
+.aboutPage .about .findMe .links button a {
+  color: #6ac045;
+}
+
+.aboutPage .about .address {
+  /* border-bottom: 1px solid #efefef; */
+  margin: 30px;
+}
+.aboutPage .about .address h3 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+.aboutPage .about .address p {
+  color: #717171;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 20px;
 }
 .cancel,
 .add {

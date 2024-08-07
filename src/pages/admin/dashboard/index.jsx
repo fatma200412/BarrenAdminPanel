@@ -168,7 +168,7 @@ function Dashboard() {
         <div className={style.user}>
           <div className={style.about}>
             <div className={style.image}>
-              <img src={user.profilImage} alt="user" />
+              <img src={user.image} alt="user" />
             </div>
             <div className={style.title}>
               <h6>

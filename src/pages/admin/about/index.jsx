@@ -30,6 +30,12 @@ import CardContent from "@mui/material/CardContent";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import LanguageIcon from "@mui/icons-material/Language";
 // import { LineGragh } from "../../../components/chartjs/Line";
 
 const styleModal = {
@@ -136,12 +142,17 @@ function About() {
         <div className={style.about}>
           <div className={style.edit}>
             <h2>About</h2>
-            <FontAwesomeIcon icon={faPen} color="#717171"/>
+
+            <FontAwesomeIcon
+              onClick={handleOpen}
+              icon={faPen}
+              color="#717171"
+            />
           </div>
 
           <div className={style.profil}>
             <div className={style.profilImage}>
-              <img src={user.profilImage} alt="profil" />
+              <img src={user.image} alt="profil" />
             </div>
             <h2>
               {user.firstName} {user.lastName}{" "}
@@ -149,6 +160,60 @@ function About() {
             </h2>
             <p>{user.email}</p>
           </div>
+
+          <div className={style.desp}>
+            <h6>Tell us about yourself and let people know who you are</h6>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+              tincidunt interdum nunc et auctor. Phasellus quis pharetra sapien.
+              Integer ligula sem, sodales vitae varius in, varius eget augue.
+            </p>
+          </div>
+
+          <div className={style.findMe}>
+            <h2>Find me on</h2>
+            <div className={style.links}>
+              <button>
+                <a href="https://www.facebook.com/" target="_blank">
+                  <FacebookIcon />
+                </a>
+              </button>
+              <button>
+                <a href="https://www.instagram.com/" target="_blank">
+                  <InstagramIcon />
+                </a>
+              </button>
+              <button>
+                <a href="https://x.com/" target="_blank">
+                  <TwitterIcon />
+                </a>
+              </button>
+              <button>
+                <a href="https://www.linkedin.com/" target="_blank">
+                  <LinkedInIcon />
+                </a>
+              </button>
+              <button>
+                <a href="https://youtube.com/" target="_blank">
+                  <YouTubeIcon />
+                </a>
+              </button>
+              <button>
+                <a href="https://google.com/" target="_blank">
+                  <LanguageIcon />
+                </a>
+              </button>
+            </div>
+          </div>
+
+          <div className={style.address}>
+            <h3>Address</h3>
+            <p>
+              {user.address.address} ,{user.address.city} ,{user.address.county}{" "}
+            </p>
+          </div>
+
+          
         </div>
       </div>
       <div>
