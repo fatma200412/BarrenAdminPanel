@@ -5,13 +5,13 @@ import ContactList from "../pages/admin/contactList";
 import Payouts from "../pages/admin/payouts";
 import Reports from "../pages/admin/reports";
 import AdminRoot from "../pages/admin/adminRoot";
-import MyTeam from "../pages/admin/myTeam";
 import Login from "../pages/admin/login";
 import NoPage from "../pages/noPage";
 import Register from "../pages/admin/register";
 import ForgetPassword from "../pages/forgetPassword";
 import MyProfile from "../pages/admin/myProfile";
 import About from "../pages/admin/about";
+import CreateNewEvent from "../pages/admin/createNewEvent";
 
 export const routes = [
   {
@@ -47,11 +47,11 @@ export const routes = [
         path: "/admin/about",
         element: <About />,
       },
-      {
-        path: "/admin/myteam",
-        element: <MyTeam />,
-      },
     ],
+  },
+  {
+    path: "/createNewEvent",
+    element: <CreateNewEvent />,
   },
   {
     path: "/myProfile",

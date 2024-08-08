@@ -1,0 +1,122 @@
+.about {
+  border: 1px solid #eeeded;
+  width: 100%;
+  background-color: white !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  /* margin-bottom: 100px; */
+}
+.about .edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 15px;
+  border-bottom: 1px solid #efefef;
+  margin-bottom: 20px;
+}
+.about .edit h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.about .profil {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  border-bottom: 1px solid #efefef;
+  margin: 30px;
+}
+
+
+.about .profil h3{
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-decoration: none solid rgb(0, 0, 0);
+}
+.about .profil h2 {
+  color: #717171;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 25px;
+  text-decoration: none solid rgb(113, 113, 113);
+}
+
+.about .desp {
+  /* padding: 0 30px; */
+  border-bottom: 1px solid #efefef;
+  margin: 30px;
+  margin-bottom: 20px;
+}
+.about .desp h6 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 15px;
+}
+.about .desp p {
+  color: #717171;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 15px;
+}
+
+.about .findMe {
+  border-bottom: 1px solid #efefef;
+  margin: 30px;
+}
+.about .findMe h2 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+.about .findMe .links button {
+  margin-right: 10px;
+  border-radius: 50%;
+  padding: 5px;
+  border: 1px solid #6ac045;
+  background-color: white;
+  margin-bottom: 40px;
+}
+.about .findMe .links button a {
+  color: #6ac045;
+}
+
+.about .address {
+  /* border-bottom: 1px solid #efefef; */
+  margin: 30px;
+}
+.about .address h3 {
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+.about .address p {
+  color: #717171;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 20px;
+}
+.cancel,
+.add {
+  margin: 10px;
+  padding: 10px 35px;
+  border-radius: 5px;
+}
+.cancel {
+  background-color: white;
+  border: 2px solid #c2c1c1;
+}
+.cancel:hover {
+  background-color: #e8f7f7;
+}
+.add {
+  background-color: #6ac045;
+  border: none;
+  color: white;
+}
+.add:hover {
+  background-color: #78d650;
+}

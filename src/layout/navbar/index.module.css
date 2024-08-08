@@ -4,11 +4,11 @@
   /* width: 230px; */
   height: 150vh;
   float: left;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px -15px;
   transition: width 0.3s;
 }
 .navOpen {
-  width: 230px;
+  width: 200px;
 }
 .navClosed {
   width: 62px;

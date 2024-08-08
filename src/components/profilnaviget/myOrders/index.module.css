@@ -1,0 +1,41 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cards .card footer .gridFooter {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+.cards .card footer .gridFooter .icons {
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: #6ac045;
+  background-color: RGB(232, 247, 247);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+.cards .card footer .gridFooter .icons .icon {
+  font-size: 16px;
+  font-weight: 900;
+  text-decoration: none solid rgb(106, 192, 69);
+}
+.cards .card footer .gridFooter .title p {
+  color: #717171;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none solid rgb(113, 113, 113);
+  margin-bottom: 5px;
+}
+.cards .card footer .gridFooter .title h6 {
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none solid rgb(0, 0, 0);
+  margin-bottom: 5px;
+}

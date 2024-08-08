@@ -35,13 +35,13 @@ const ModalStyle = {
   // alignItems: "center",
 };
 
-function Header() {
+function Header({ toggleNavbar, isNavbarOpen }) {
   const user = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   console.log(user);
 
   const [mode, setMode] = useState(false);
-  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+  // const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   // const [profileInfo, setProfileInfo] = useState({});
   // const [isModalOpen, setIsModalOpen] = useState(false); // Modal durumu
   const [open, setOpen] = useState(false);
@@ -76,9 +76,9 @@ function Header() {
     }
   }
 
-  function toggleNavbar() {
-    setIsNavbarOpen(!isNavbarOpen);
-  }
+  // function toggleNavbar() {
+  //   setIsNavbarOpen(!isNavbarOpen);
+  // }
   // function openModal() {
   //   setIsModalOpen(true);
   // }
@@ -109,13 +109,13 @@ function Header() {
 
             <div className={style.iconAndBtns}>
               <div className={style.naviget}>
-                <Link to="/admin/myHome" className={style.iconAndNav}>
+                <Link to="/myProfile" className={style.iconAndNav}>
                   <MultipleStopIcon /> My Home
                 </Link>
                 <a href="" className={style.iconAndNav}>
                   <ExploreIcon /> Explore Events
                 </a>
-                <button className={style.calendar}>
+                <Link to="/createNewEvent" className={style.calendar}>
                   <CalendarMonthIcon
                     style={{
                       marginRight: "10px",
@@ -124,7 +124,7 @@ function Header() {
                     }}
                   />
                   Create Events
-                </button>
+                </Link>
               </div>
               <div className={style.btns}>
                 <button

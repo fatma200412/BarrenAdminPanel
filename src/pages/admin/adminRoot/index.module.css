@@ -1,0 +1,21 @@
+/* Adjust content area width based on navbar state */
+.content {
+  transition: margin-left 0.3s; /* Smooth transition for the content area */
+}
+
+.contentOpen {
+  margin-left: 200px; /* Adjust this value based on your navbar open width */
+}
+
+.contentClosed {
+  margin-left: 62px; /* Adjust this value based on your navbar closed width */
+}
+
+/* Ensure the navbar does not create an overlap */
+.navOpen {
+  width: 200px;
+}
+
+.navClosed {
+  width: 62px;
+}
