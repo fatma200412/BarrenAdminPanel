@@ -14,6 +14,7 @@ import { login } from "../../../redux/slices/adminSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 function Login() {
   const initialValues = { email: "", password: "" };
@@ -55,12 +56,28 @@ function Login() {
                       user.email == values.email &&
                       user.password == values.password
                     ) {
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Logging in",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
                       userFound = true;
                       dispatch(login(user));
                       navigate("/admin");
                       break;
                     }
                     if (!userFound) {
+                      {
+                        Swal.fire({
+                          position: "center",
+                          icon: "error",
+                          title: "Password or username is incorrect",
+                          showConfirmButton: false,
+                          timer: 1500,
+                        });
+                      }
                       console.log("sifre veya istifadeci adi yalnisdir");
                     }
                   }
@@ -88,7 +105,7 @@ function Login() {
                   Forget Password?
                 </Link>
               </div>
- 
+
               <Field
                 id="password"
                 name="password"

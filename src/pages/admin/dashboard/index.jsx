@@ -443,19 +443,44 @@ function Dashboard() {
         >
           <Fade in={open}>
             <Box sx={styleModal}>
-              <Typography
-                id="transition-modal-title"
-                variant="h6"
-                component="h2"
+              <div
                 style={{
-                  fontSize: "16px",
-                  fontWeight: "500",
+                  display: "flex",
                   borderBottom: "1px solid grey",
-                  padding: "12px",
+                  justifyContent: "space-between",
                 }}
               >
-                Organisation details
-              </Typography>
+                <Typography
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h2"
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: "500",
+
+                    padding: "12px",
+                  }}
+                >
+                  Organisation details
+                </Typography>
+                <Typography
+                  onClick={handleClose}
+                  id="transition-modal-title"
+                  variant="h6"
+                  component="h2"
+                  style={{
+                    color: "grey",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    // borderBottom: "1px solid grey",
+                    padding: "12px",
+                    cursor: "pointer",
+                  }}
+                >
+                  X
+                </Typography>
+              </div>
+
               <FormControl
                 variant="standard"
                 style={{

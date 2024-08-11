@@ -66,7 +66,7 @@ function MyProfile() {
                 <button onClick={() => navigate("/admin")}>
                   My Organisation <FontAwesomeIcon icon={faRightLeft} />
                 </button>
-              </div>
+              </div> 
 
               <div className={style.findMe}>
                 <h2>Find me on</h2>

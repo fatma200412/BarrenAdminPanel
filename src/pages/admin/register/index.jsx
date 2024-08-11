@@ -11,6 +11,7 @@ import {
 } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/system/Unstable_Grid";
+import Swal from "sweetalert2";
 
 function Register() {
   const initialValues = {
@@ -61,6 +62,15 @@ function Register() {
                     values
                   )
                   .then((res) => {
+                    {
+                      Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Registration completed successfully",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    }
                     if (res.status == 200) {
                       alert("qey tamamlandir");
                       navigate("/");

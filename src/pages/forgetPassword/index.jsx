@@ -1,14 +1,11 @@
 import style from "./index.module.css";
 import logo from "../../assets/images/login/sign-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Formik,
-  Form,
-  Field,
-} from "formik";
+import { Formik, Form, Field } from "formik";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function ForgetPassword() {
   const navigate = useNavigate(); // To navigate after password reset
@@ -56,29 +53,68 @@ function ForgetPassword() {
               axios("https://669b5625276e45187d352b89.mockapi.io/users")
                 .then((res) => {
                   const users = res.data;
-                  const user = users.find(user => user.email === values.email);
+                  const user = users.find(
+                    (user) => user.email === values.email
+                  );
 
                   if (user) {
                     // Update the user's password
-                    axios.put(`https://669b5625276e45187d352b89.mockapi.io/users/${user.id}`, {
-                      ...user,
-                      password: values.newPassword,
-                    })
-                    .then(() => {
-                      alert("Password reset successfully");
-                      navigate("/login");
-                    })
-                    .catch(error => {
-                      console.error("Error updating password:", error);
-                      alert("Failed to update password");
-                    });
+                    axios
+                      .put(
+                        `https://669b5625276e45187d352b89.mockapi.io/users/${user.id}`,
+                        {
+                          ...user,
+                          password: values.newPassword,
+                        }
+                      )
+                      .then(() => {
+                        {
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Password reset successfully",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          });
+                        }
+
+                        navigate("/login");
+                      })
+                      .catch((error) => {
+                        {
+                          Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Failed to update password",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          });
+                        }
+                        console.error("Error updating password:", error);
+                      });
                   } else {
-                    alert("User not found");
+                    {
+                      Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "User not found",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    }
                   }
                 })
-                .catch(error => {
+                .catch((error) => {
+                  {
+                    Swal.fire({
+                      position: "center",
+                      icon: "error",
+                      title: "Failed to fetch users",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  }
                   console.error("Error fetching users:", error);
-                  alert("Failed to fetch users");
                 });
 
               actions.setSubmitting(false);
@@ -109,7 +145,9 @@ function ForgetPassword() {
                   placeholder="New Password"
                   className={style.inp}
                 />
-                {errors.newPassword && touched.newPassword && <div>{errors.newPassword}</div>}
+                {errors.newPassword && touched.newPassword && (
+                  <div>{errors.newPassword}</div>
+                )}
 
                 <label htmlFor="confirmPassword" className={style.label}>
                   Confirm Password*
@@ -122,7 +160,9 @@ function ForgetPassword() {
                   placeholder="Confirm Password"
                   className={style.inp}
                 />
-                {errors.confirmPassword && touched.confirmPassword && <div>{errors.confirmPassword}</div>}
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <div>{errors.confirmPassword}</div>
+                )}
 
                 <button type="submit">Reset Password</button>
               </Form>

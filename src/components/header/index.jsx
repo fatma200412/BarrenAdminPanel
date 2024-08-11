@@ -18,6 +18,7 @@ import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slices/adminSlice";
+import Swal from "sweetalert2";
 
 const ModalStyle = {
   position: "absolute",
@@ -89,8 +90,25 @@ function Header({ toggleNavbar, isNavbarOpen }) {
 
   function handleLogout() {
     // localStorage.removeItem("isLogin");
-    dispatch(logout());
-    navigate("/login");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, sign out!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Sign Outed!",
+          text: "Profile sign outed",
+          icon: "success",
+        });
+        dispatch(logout());
+        navigate("/login");
+      }
+    });
   }
 
   return (

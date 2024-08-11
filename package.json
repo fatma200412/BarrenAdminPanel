@@ -45,7 +45,8 @@
     "recharts": "^2.12.7",
     "service": "^0.1.4",
     "sort-by": "^1.2.0",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "sweetalert2": "^11.12.4"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
