@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import style from "./index.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
-import logo from "../../assets/images/header/logo-icon.svg";
+import logo from "../../assets/images/header/logo (2).svg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MultipleStopIcon from "@mui/icons-material/MultipleStop";
@@ -121,7 +121,7 @@ function Header({ toggleNavbar, isNavbarOpen }) {
                 <MenuIcon className={style.barIcon} />
               </button>
               <Link to="/admin">
-                <img className={style.logo} src={logo} alt="" />
+                <img className={style.logo} src={logo} alt="" width={160} style={{padding:"10px"}}/>
               </Link>
             </div>
 
