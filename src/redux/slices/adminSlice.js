@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isLogin: localStorage.getItem("isLogin") === "true",
-  userInfo: JSON.parse(localStorage.getItem("userInfo")) ||{}
+  isLogin: localStorage.getItem("token") !== null,
+  userInfo: JSON.parse(localStorage.getItem("userInfo")) || {},
 };
 
 export const userSlice = createSlice({
@@ -11,15 +11,16 @@ export const userSlice = createSlice({
   reducers: {
     login: (state, action) => {
       state.isLogin = true;
-      state.userInfo=action.payload
-      localStorage.setItem("isLogin", true);
-      localStorage.setItem("userInfo",JSON.stringify(action.payload))
+      state.userInfo = action.payload;
+      // localStorage.setItem("token", true);
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     logout: (state) => {
       state.isLogin = false;
-      state.userInfo={}
-      localStorage.removeItem("isLogin");
-      localStorage.removeItem("userInfo")
+      state.userInfo = {};
+      // localStorage.removeItem("token");
+      // localStorage.removeItem("roles");
+      localStorage.removeItem("userInfo");
     },
   },
 });

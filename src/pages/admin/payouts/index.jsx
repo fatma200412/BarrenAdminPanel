@@ -8,11 +8,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 // import CustomFilterDemo from "../../../components/dataTableEvents";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 // import { Input } from "antd";
-
 import { Table } from "antd";
 
 import Highlighter from "react-highlight-words";
@@ -28,6 +27,7 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/system/Unstable_Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import axios from "axios";
 
 const styleModal = {
   position: "absolute",
@@ -50,6 +50,64 @@ function Payouts() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [data, setData] = useState([]); // State to hold fetched data
+  const [loading, setLoading] = useState(true); // State to handle loading
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    if (!token) {
+      setError(new Error("No token found, please log in again."));
+      setLoading(false);
+      return;
+    }
+
+    axios("http://localhost:5011/api/BankAccount/bankAccount", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        const formattedData = res.data.result.map((item, index) => ({
+          ...item,
+          key: index, // Or use another unique identifier
+        }));
+        setData(formattedData);
+        // setData(res.data.result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          // Handle unauthorized error
+          setError(new Error("Unauthorized access. Please log in again."));
+          localStorage.removeItem("userInfo"); // Clear invalid token
+          // Optionally, redirect to the login page
+        } else {
+          setError(err);
+        }
+        setLoading(false);
+      });
+    return () => {};
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading data: {error.message}</p>;
+  }
+  // account number
+  const maskAccountNumber = (number) => {
+    const str = number?.toString();
+    if (!str) return "";
+    const visiblePart = str.slice(-4); // Last 4 digits
+    const maskedPart = "****"; // Masking part
+    return `${maskedPart}${visiblePart}`;
+  };
   return (
     <>
       <div className={style.eventsPages}>
@@ -88,19 +146,24 @@ function Payouts() {
         </div>
 
         <div className={style.bankCards}>
-          <div className={style.card}>
-            <h2>Bank Name</h2>
-            <h4>John Doe</h4>
-            <p>****1234</p>
+          {data?.map((elem, i) => {
+            return (
+              <div key={i} className={style.card}>
+                <h2>{elem.bankName}</h2>
+                <h4>
+                  {elem.firstName} {elem.lastName}{" "}
+                </h4>
+                <p>{maskAccountNumber(elem.accountNumber)}</p>
 
-            <button className={style.edit} onClick={handleOpen}>
-              <FontAwesomeIcon icon={faPen}  color="#717171"/>
-            </button>
-            <button className={style.delete}>
-              <FontAwesomeIcon icon={faTrashCan} color="#717171" />
-            </button>
-          </div>
-        
+                <button className={style.edit} onClick={handleOpen}>
+                  <FontAwesomeIcon icon={faPen} color="#717171" />
+                </button>
+                <button className={style.delete}>
+                  <FontAwesomeIcon icon={faTrashCan} color="#717171" />
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -118,19 +181,43 @@ function Payouts() {
       >
         <Fade in={open}>
           <Box sx={styleModal}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
+            <div
               style={{
-                fontSize: "16px",
-                fontWeight: "500",
-                borderBottom: "1px solid #efefef",
-                padding: "15px",
+                display: "flex",
+                borderBottom: "1px solid grey",
+                justifyContent: "space-between",
               }}
             >
-              Add Bank Account
-            </Typography>
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #efefef",
+                  padding: "15px",
+                }}
+              >
+                Add Bank Account
+              </Typography>
+              <Typography
+                onClick={handleClose}
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  color: "grey",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  // borderBottom: "1px solid grey",
+                  padding: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                X
+              </Typography>
+            </div>
 
             <FormControl
               variant="standard"
@@ -342,4 +429,4 @@ function Payouts() {
   );
 }
 
-export default Payouts;
+export { Payouts };

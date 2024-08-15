@@ -1,6 +1,6 @@
 import React from "react";
 import style from "./index.module.css";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faVideoCamera,
@@ -9,6 +9,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function CreateNewEvent() {
+  const navigate = useNavigate();
+
+  const handleCreateOnlineEvent = () => {
+    navigate("/createNewEvent/create?type=online");
+  };
+
+  const handleCreateVenueEvent = () => {
+    navigate("/createNewEvent/create?type=venue");
+  };
   return (
     <>
       <div className={style.nav}>
@@ -32,7 +41,7 @@ function CreateNewEvent() {
               <FontAwesomeIcon icon={faVideoCamera} />
             </div>
             <h6>Create an Online Event</h6>
-            <button>
+            <button onClick={handleCreateOnlineEvent}>
               Create <FontAwesomeIcon icon={faRightLong} />
             </button>
           </div>
@@ -41,7 +50,7 @@ function CreateNewEvent() {
               <FontAwesomeIcon icon={faLocationDot} />
             </div>
             <h6>Create an Venue Event</h6>
-            <button>
+            <button onClick={handleCreateVenueEvent}>
               Create <FontAwesomeIcon icon={faRightLong} />
             </button>
           </div>

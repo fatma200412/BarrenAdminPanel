@@ -10,16 +10,20 @@ const theme = createTheme();
 const router = createBrowserRouter(routes);
 
 function App() {
-  let name = "fatma";
-  let surname = "quliyeva";
-
   const [isLoginAdmin, setIsLoginAdmin] = useState(false);
 
-  let data = [name, surname, isLoginAdmin, setIsLoginAdmin];
+  const [userRole, setUserRole] = useState(''); // Example, replace with your logic
+
+  const authContextValue = {
+    isLoginAdmin,
+    setIsLoginAdmin,
+    userRole,
+    setUserRole
+  };
 
   return (
     <>
-      <AdminAuth.Provider value={data}>
+      <AdminAuth.Provider value={authContextValue}>
         <ThemeProvider theme={theme}>
           <RouterProvider router={router} />
         </ThemeProvider>

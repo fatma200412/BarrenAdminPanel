@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 // import CustomFilterDemo from "../../../components/dataTableEvents";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 // import { Input } from "antd";
@@ -27,33 +27,7 @@ import Grid from "@mui/system/Unstable_Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import imgLogo from "../../../assets/images/eventsModal/logo.png";
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
+import axios from "axios";
 
 const styleModal = {
   position: "absolute",
@@ -72,7 +46,48 @@ const styleModal = {
 function Promotion() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [data, setData] = useState([]); // State to hold fetched data
+  const [loading, setLoading] = useState(true); // State to handle loading
+  const [error, setError] = useState(null);
   const searchInput = useRef(null);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    if (!token) {
+      setError(new Error("No token found, please log in again."));
+      setLoading(false);
+      return;
+    }
+
+    axios("http://localhost:5011/api/Coupon/getCoupon", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        const formattedData = res.data.result.map((item, index) => ({
+          ...item,
+          key: index, // Or use another unique identifier
+        }));
+        setData(formattedData);
+        // setData(res.data.result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          // Handle unauthorized error
+          setError(new Error("Unauthorized access. Please log in again."));
+          localStorage.removeItem("userInfo"); // Clear invalid token
+          // Optionally, redirect to the login page
+        } else {
+          setError(err);
+        }
+        setLoading(false);
+      });
+    return () => {};
+  }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -188,6 +203,12 @@ function Promotion() {
   });
   const columns = [
     {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      width: "30%",
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -195,21 +216,116 @@ function Promotion() {
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
       width: "20%",
       ...getColumnSearchProps("age"),
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ["descend", "ascend"],
+      title: "Discount",
+      dataIndex: "discount",
+      key: "discount",
+      width: "20%",
+      ...getColumnSearchProps("discount"),
     },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: "20%",
+      ...getColumnSearchProps("price"),
+    },
+    {
+      title: "DiscountEnd",
+      dataIndex: "discountEnd",
+      key: "discountEnd",
+      width: "20%",
+      ...getColumnSearchProps("discountEnd"),
+    },
+    {
+      title: "Time",
+      dataIndex: "time",
+      key: "time",
+      width: "20%",
+      ...getColumnSearchProps("time"),
+    },
+    {
+      title: "Edit",
+      // dataIndex: "edit",
+      key: "edit",
+      // width: "20%",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          style={{
+            marginRight: 8,
+            backgroundColor: "yellow",
+            borderColor: "yellow",
+            color: "black",
+          }}
+          onClick={() => handleEdit(record)}
+        >
+          Edit
+        </Button>
+      ),
+    },
+    {
+      title: "Delete",
+      // dataIndex: "delete",
+      key: "delete",
+      // width: "20%",
+      render: (_, record) => (
+        <Button
+          type="danger"
+          style={{
+            backgroundColor: "#f5222d",
+            borderColor: "#f5222d",
+            color: "white",
+          }}
+          onClick={() => handleDelete(record)}
+        >
+          Delete
+        </Button>
+      ),
+    },
+    // {
+    //   title: "Address",
+    //   dataIndex: "address",
+    //   key: "address",
+    //   ...getColumnSearchProps("address"),
+    //   sorter: (a, b) => a.address.length - b.address.length,
+    //   sortDirections: ["descend", "ascend"],
+    // },
   ];
+
+  const handleEdit = (record) => {
+    // Handle the edit action
+    // For example, you might want to show a modal with a form to edit the record
+    console.log("Edit record:", record);
+  };
+
+  const handleDelete = (record) => {
+    // Handle the delete action
+    // You might want to show a confirmation modal and then perform the deletion
+    console.log("Delete record:", record);
+
+    // Example delete API request
+    // const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    // axios
+    //   .delete(`http://localhost:5011/api/Event/events/${record.id}`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then(() => {
+    //     // Remove the deleted record from the data state
+    //     setData(data.filter((item) => item.id !== record.id));
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error deleting record:", err);
+    //   });
+  };
 
   // modal
 
@@ -217,6 +333,14 @@ function Promotion() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading data: {error.message}</p>;
+  }
 
   return (
     <>
@@ -279,19 +403,43 @@ function Promotion() {
       >
         <Fade in={open}>
           <Box sx={styleModal}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
+            <div
               style={{
-                fontSize: "16px",
-                fontWeight: "500",
-                borderBottom: "1px solid #efefef",
-                padding: "12px",
+                display: "flex",
+                borderBottom: "1px solid grey",
+                justifyContent: "space-between",
               }}
             >
-              Create Your Coupon
-            </Typography>
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #efefef",
+                  padding: "12px",
+                }}
+              >
+                Create Your Coupon
+              </Typography>
+              <Typography
+                onClick={handleClose}
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  color: "grey",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  // borderBottom: "1px solid grey",
+                  padding: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                X
+              </Typography>
+            </div>
 
             <div style={{ display: "flex" }}>
               <div style={{ margin: "55px auto" }}>
@@ -311,6 +459,29 @@ function Promotion() {
                 borderTop: "2px dashed #efefef",
               }}
             >
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="span"
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  padding: "5px",
+                }}
+              >
+                Name*
+              </Typography>
+              <TextField
+                variant="outlined"
+                name="code"
+                // value={formsData.name}
+                // onChange={handleInputChange}
+                style={{
+                  margin: "8px",
+                  width: "100%",
+                  backgroundColor: "#f9f9f9",
+                }}
+              />
               <Typography
                 id="transition-modal-title"
                 variant="h6"
@@ -444,7 +615,13 @@ function Promotion() {
               </Grid>
             </FormControl>
 
-            <div style={{ borderTop: "2px solid #efefef", textAlign: "right" ,padding:"10px"}}>
+            <div
+              style={{
+                borderTop: "2px solid #efefef",
+                textAlign: "right",
+                padding: "10px",
+              }}
+            >
               <button onClick={handleClose} className={style.cancel}>
                 Cancel
               </button>
@@ -457,4 +634,4 @@ function Promotion() {
   );
 }
 
-export default Promotion;
+export { Promotion };

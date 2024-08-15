@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 // import CustomFilterDemo from "../../../components/dataTableEvents";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 // import { Input } from "antd";
@@ -24,33 +24,7 @@ import Backdrop from "@mui/material/Backdrop";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/system/Unstable_Grid";
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
+import axios from "axios";
 
 const styleModal = {
   position: "absolute",
@@ -71,6 +45,47 @@ function ContactList() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [description, setDescription] = useState("");
+  const [data, setData] = useState([]); // State to hold fetched data
+  const [loading, setLoading] = useState(true); // State to handle loading
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    if (!token) {
+      setError(new Error("No token found, please log in again."));
+      setLoading(false);
+      return;
+    }
+
+    axios("http://localhost:5011/api/ContactList/getList", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        console.log(res.data.result);
+        const formattedData = res.data.result.map((item, index) => ({
+          ...item,
+          key: index, // Or use another unique identifier
+        }));
+        setData(formattedData);
+        // setData(res.data.result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          // Handle unauthorized error
+          setError(new Error("Unauthorized access. Please log in again."));
+          localStorage.removeItem("userInfo"); // Clear invalid token
+          // Optionally, redirect to the login page
+        } else {
+          setError(err);
+        }
+        setLoading(false);
+      });
+    return () => {};
+  }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -186,28 +201,115 @@ function ContactList() {
   });
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       width: "30%",
-      ...getColumnSearchProps("name"),
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "List Name",
+      dataIndex: "listName",
+      key: "listName",
+      width: "30%",
+      ...getColumnSearchProps("listName"),
+    },
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
       width: "20%",
-      ...getColumnSearchProps("age"),
+      ...getColumnSearchProps("firstName"),
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ["descend", "ascend"],
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName",
+      width: "20%",
+      ...getColumnSearchProps("lastName"),
     },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: "20%",
+      ...getColumnSearchProps("email"),
+    },
+    {
+      title: "Edit",
+      // dataIndex: "edit",
+      key: "edit",
+      // width: "20%",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          style={{
+            marginRight: 8,
+            backgroundColor: "yellow",
+            borderColor: "yellow",
+            color: "black",
+          }}
+          onClick={() => handleEdit(record)}
+        >
+          Edit
+        </Button>
+      ),
+    },
+    {
+      title: "Delete",
+      // dataIndex: "delete",
+      key: "delete",
+      // width: "20%",
+      render: (_, record) => (
+        <Button
+          type="danger"
+          style={{
+            backgroundColor: "#f5222d",
+            borderColor: "#f5222d",
+            color: "white",
+          }}
+          onClick={() => handleDelete(record)}
+        >
+          Delete
+        </Button>
+      ),
+    },
+    // {
+    //   title: "Address",
+    //   dataIndex: "address",
+    //   key: "address",
+    //   ...getColumnSearchProps("address"),
+    //   sorter: (a, b) => a.address.length - b.address.length,
+    //   sortDirections: ["descend", "ascend"],
+    // },
   ];
+
+  const handleEdit = (record) => {
+    // Handle the edit action
+    // For example, you might want to show a modal with a form to edit the record
+    console.log("Edit record:", record);
+  };
+
+  const handleDelete = (record) => {
+    // Handle the delete action
+    // You might want to show a confirmation modal and then perform the deletion
+    console.log("Delete record:", record);
+
+    // Example delete API request
+    // const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    // axios
+    //   .delete(`http://localhost:5011/api/Event/events/${record.id}`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then(() => {
+    //     // Remove the deleted record from the data state
+    //     setData(data.filter((item) => item.id !== record.id));
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error deleting record:", err);
+    //   });
+  };
 
   // modal
 
@@ -215,6 +317,16 @@ function ContactList() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading data: {error.message}</p>;
+  }
+
   return (
     <>
       <div className={style.eventsPages}>
@@ -276,19 +388,44 @@ function ContactList() {
       >
         <Fade in={open}>
           <Box sx={styleModal}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
+            <div
               style={{
-                fontSize: "16px",
-                fontWeight: "500",
-                borderBottom: "1px solid #efefef",
-                padding: "12px",
+                display: "flex",
+                borderBottom: "1px solid grey",
+                justifyContent: "space-between",
               }}
             >
-              Create New List
-            </Typography>
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  borderBottom: "1px solid #efefef",
+                  padding: "12px",
+                }}
+              >
+                Create New List
+              </Typography>
+
+              <Typography
+                onClick={handleClose}
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+                style={{
+                  color: "grey",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  // borderBottom: "1px solid grey",
+                  padding: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                X
+              </Typography>
+            </div>
 
             <FormControl
               variant="standard"
@@ -473,4 +610,4 @@ function ContactList() {
   );
 }
 
-export default ContactList;
+export { ContactList };

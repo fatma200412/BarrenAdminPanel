@@ -206,7 +206,7 @@ function AboutProfil() {
         <div className={style.address}>
           <h3>Address</h3>
           <p>
-            {user.address.address} ,{user.address.city} ,{user.address.county}{" "}
+            {user?.address?.address} ,{user?.address?.city} ,{user?.address?.county}{" "}
           </p>
         </div>
       </div>

@@ -315,4 +315,4 @@ function Reports() {
   );
 }
 
-export default Reports;
+export  {Reports};

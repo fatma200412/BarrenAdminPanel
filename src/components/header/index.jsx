@@ -121,7 +121,13 @@ function Header({ toggleNavbar, isNavbarOpen }) {
                 <MenuIcon className={style.barIcon} />
               </button>
               <Link to="/admin">
-                <img className={style.logo} src={logo} alt="" width={160} style={{padding:"10px"}}/>
+                <img
+                  className={style.logo}
+                  src={logo}
+                  alt=""
+                  width={160}
+                  style={{ padding: "10px" }}
+                />
               </Link>
             </div>
 
@@ -130,7 +136,10 @@ function Header({ toggleNavbar, isNavbarOpen }) {
                 <Link to="/myProfile" className={style.iconAndNav}>
                   <MultipleStopIcon /> My Home
                 </Link>
-                <a href="" className={style.iconAndNav}>
+                <a
+                  href="https://barren-user-page.vercel.app/"
+                  className={style.iconAndNav}
+                >
                   <ExploreIcon /> Explore Events
                 </a>
                 <Link to="/createNewEvent" className={style.calendar}>
