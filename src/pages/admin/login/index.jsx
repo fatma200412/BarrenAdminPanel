@@ -33,7 +33,16 @@ function Login() {
         },
       })
       .then((res) => {
-        const { token, roles,firstName, lastName, email  } = res.data.result;
+        const {
+          token,
+          roles,
+          firstName,
+          lastName,
+          email,
+          country,
+          city,
+          addres,
+        } = res.data.result;
         if (token) {
           Swal.fire({
             position: "center",
@@ -41,19 +50,27 @@ function Login() {
             title: "Logging in",
             showConfirmButton: false,
             timer: 1500,
-          });const userInfo = {
+          });
+          const userInfo = {
             token,
             roles,
             firstName,
             lastName,
             email,
+            country,
+            city,
+            addres,
           };
           localStorage.setItem("userInfo", JSON.stringify(userInfo));
-  
-          // Dispatching the login action with userInfo
+
           dispatch(login(userInfo));
+
           setIsLoginAdmin(true);
           setUserRole("admin");
+
+          localStorage.setItem("isLoginAdmin", true);
+          localStorage.setItem("userRole", "admin");
+
           navigate("/admin");
         } else {
           Swal.fire({

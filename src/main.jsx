@@ -3,6 +3,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
+import { AdminAuthProvider } from "./context/adminAuth.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <BrowserRouter>
@@ -10,7 +11,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
   //   </React.Fragment>
   // </BrowserRouter>
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <AdminAuthProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </AdminAuthProvider>
 );

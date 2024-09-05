@@ -28,6 +28,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import imgLogo from "../../../assets/images/eventsModal/logo.png";
 import axios from "axios";
+import { key } from "localforage";
 
 const styleModal = {
   position: "absolute",
@@ -51,7 +52,18 @@ function Promotion() {
   const [error, setError] = useState(null);
   const searchInput = useRef(null);
 
-  useEffect(() => {
+  const [formData, setFormData] = useState({
+    name: "",
+    code: "",
+    discount: 0,
+    discountType: 1 || 2,
+    discountEnd: "",
+    time: "",
+  });
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const fetchData = () => {
     const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
 
     if (!token) {
@@ -86,9 +98,11 @@ function Promotion() {
         }
         setLoading(false);
       });
-    return () => {};
-  }, []);
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -213,6 +227,7 @@ function Promotion() {
       dataIndex: "name",
       key: "name",
       width: "30%",
+      sorter: (a, b) => a.name?.localeCompare(b.name),
       ...getColumnSearchProps("name"),
     },
     {
@@ -220,27 +235,40 @@ function Promotion() {
       dataIndex: "code",
       key: "code",
       width: "20%",
-      ...getColumnSearchProps("age"),
+      sorter: (a, b) => a.code?.localeCompare(b.code),
+      ...getColumnSearchProps("code"),
     },
     {
       title: "Discount",
       dataIndex: "discount",
       key: "discount",
       width: "20%",
+      sorter: (a, b) => a?.discount - b?.discount,
       ...getColumnSearchProps("discount"),
     },
     {
       title: "Price",
-      dataIndex: "price",
-      key: "price",
+      // 1-de percent 2de fixed Price
+      dataIndex: "discountType",
+      key: "discountType",
       width: "20%",
-      ...getColumnSearchProps("price"),
+      render: (text) => {
+        switch (text) {
+          case 1:
+            return "$";
+          case 2:
+            return "%";
+          default:
+            return text;
+        }
+      },
     },
     {
       title: "DiscountEnd",
       dataIndex: "discountEnd",
       key: "discountEnd",
       width: "20%",
+      sorter: (a, b) => a?.discountEnd?.localeCompare(b?.discountEnd),
       ...getColumnSearchProps("discountEnd"),
     },
     {
@@ -248,6 +276,8 @@ function Promotion() {
       dataIndex: "time",
       key: "time",
       width: "20%",
+      sorter: (a, b) => a?.time?.localeCompare(b?.time),
+
       ...getColumnSearchProps("time"),
     },
     {
@@ -289,20 +319,15 @@ function Promotion() {
         </Button>
       ),
     },
-    // {
-    //   title: "Address",
-    //   dataIndex: "address",
-    //   key: "address",
-    //   ...getColumnSearchProps("address"),
-    //   sorter: (a, b) => a.address.length - b.address.length,
-    //   sortDirections: ["descend", "ascend"],
-    // },
   ];
 
   const handleEdit = (record) => {
     // Handle the edit action
     // For example, you might want to show a modal with a form to edit the record
     console.log("Edit record:", record);
+    setFormData({ ...record });
+    setIsEdit(true);
+    setOpen(true);
   };
 
   const handleDelete = (record) => {
@@ -311,28 +336,119 @@ function Promotion() {
     console.log("Delete record:", record);
 
     // Example delete API request
-    // const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
-    // axios
-    //   .delete(`http://localhost:5011/api/Event/events/${record.id}`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then(() => {
-    //     // Remove the deleted record from the data state
-    //     setData(data.filter((item) => item.id !== record.id));
-    //   })
-    //   .catch((err) => {
-    //     console.error("Error deleting record:", err);
-    //   });
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    axios
+      .delete(`http://localhost:5011/api/Coupon/DeleteCoupon/${record.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        setData(data.filter((item) => item.id !== record.id));
+      })
+      .catch((err) => {
+        console.error("Error deleting record:", err);
+      });
   };
 
   // modal
 
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // post
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmitData = () => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const dataToSubmit = {
+      ...formData,
+      discount: Number(formData.discount),
+      discountType: Number(formData.discountType),
+    };
+
+    const request = isEdit
+      ? axios.put(
+          `http://localhost:5011/api/Coupon/UpdateCoupon/${formData.id}`,
+          dataToSubmit,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+      : axios.post("http://localhost:5011/api/Coupon/coupon", dataToSubmit, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+    request
+      .then((response) => {
+        const updatedCoupon = response.data;
+        console.log("API Response:", updatedCoupon);
+
+        if (isEdit) {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.id === formData.id
+                ? { ...updatedCoupon, key: formData.id }
+                : item
+            )
+          );
+        } else {
+          // setData([...data, { ...updatedCoupon, key: data.length }]);
+          fetchData();
+        }
+        setOpen(false);
+        setFormData({
+          name: "",
+          code: "",
+          discount: 0,
+          discountType: 1,
+          discountEnd: "",
+          time: "",
+        });
+      })
+      .catch((err) => {
+        console.error("Error submitting data:", err.message);
+        if (err.response) {
+          console.error("Server Response Data:", err.response.data);
+          console.error("Server Response Status:", err.response.status);
+          console.error("Server Response Headers:", err.response.headers);
+        }
+      });
+  };
+
+  const handleOpen = () => {
+    setFormData({
+      name: "",
+      code: "",
+      discount: 0,
+      discountType: 1,
+      discountEnd: "",
+      time: "",
+    });
+    setOpen(true);
+    setIsEdit(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFormData({
+      name: "",
+      code: "",
+      discount: 0,
+      discountType: 1,
+      discountEnd: "",
+      time: "",
+    });
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -341,6 +457,16 @@ function Promotion() {
   if (error) {
     return <p>Error loading data: {error.message}</p>;
   }
+
+  //input search by coupon
+
+  const handleSearchByCouponNanme = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredData = data.filter((item) =>
+    item.name?.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <>
@@ -355,7 +481,7 @@ function Promotion() {
 
         <div className={style.eventsAndSearch}>
           <div className={style.title}>
-            <h5>Coupons (1)</h5>
+            <h5>Coupons ({filteredData.length})</h5>
           </div>
           <div className={style.searchAndBtns}>
             <div className={style.inputAndIcon}>
@@ -367,7 +493,9 @@ function Promotion() {
                   />
                 </InputLeftElement>
                 <Input
-                  type="tel"
+                  type="text"
+                  value={searchText}
+                  onChange={handleSearchByCouponNanme}
                   placeholder="Search by coupons name"
                   style={{ border: "none", marginLeft: "25px" }}
                 />
@@ -383,7 +511,7 @@ function Promotion() {
           {/* <CustomFilterDemo /> */}
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             style={{ clear: "none" }}
           />
         </div>
@@ -421,7 +549,7 @@ function Promotion() {
                   padding: "12px",
                 }}
               >
-                Create Your Coupon
+                {isEdit ? "Edit Coupon" : "Create Your Coupon"}
               </Typography>
               <Typography
                 onClick={handleClose}
@@ -473,9 +601,10 @@ function Promotion() {
               </Typography>
               <TextField
                 variant="outlined"
-                name="code"
-                // value={formsData.name}
-                // onChange={handleInputChange}
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInputChange}
                 style={{
                   margin: "8px",
                   width: "100%",
@@ -497,13 +626,14 @@ function Promotion() {
               <TextField
                 variant="outlined"
                 name="code"
-                // value={formsData.name}
-                // onChange={handleInputChange}
+                value={formData.code}
+                onChange={handleInputChange}
                 style={{
                   margin: "8px",
                   width: "100%",
                   backgroundColor: "#f9f9f9",
                 }}
+                required
               />
 
               <Grid container spacing={3}>
@@ -524,13 +654,14 @@ function Promotion() {
                     variant="outlined"
                     name="discount"
                     type="number"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    value={formData.discount}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
                       backgroundColor: "#f9f9f9",
                     }}
+                    required
                   />
                 </Grid>
                 <Grid xs={12} md={6}>
@@ -548,15 +679,21 @@ function Promotion() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="price"
+                    name="discountType"
                     type="number"
-                    // value={formsData.phone}
-                    // onChange={handleInputChange}
+                    value={formData.discountType}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      if (value === 1 || value === 2 || e.target.value === "") {
+                        handleInputChange(e);
+                      }
+                    }}
                     style={{
                       margin: "8px",
                       width: "100%",
                       backgroundColor: "#f9f9f9",
                     }}
+                    required
                   />
                 </Grid>
 
@@ -575,10 +712,10 @@ function Promotion() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
+                    name="discountEnd"
                     type="datetime-local"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    value={formData.discountEnd}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -601,10 +738,10 @@ function Promotion() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="price"
+                    name="time"
                     type="datetime-local"
-                    // value={formsData.phone}
-                    // onChange={handleInputChange}
+                    value={formData.time}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -625,7 +762,9 @@ function Promotion() {
               <button onClick={handleClose} className={style.cancel}>
                 Cancel
               </button>
-              <button className={style.add}>Add</button>
+              <button className={style.add} onClick={handleSubmitData}>
+                {isEdit ? "Save Changes" : "Add Coupon"}
+              </button>
             </div>
           </Box>
         </Fade>

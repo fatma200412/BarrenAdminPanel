@@ -48,12 +48,46 @@ function Payouts() {
 
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setFormData({
+      id: null,
+      name: "",
+      code: "",
+      discount: 0,
+      discountType: 1,
+      discountEnd: "",
+      time: "",
+    });
+    setIsEdit(false);
+
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setFormData({
+      accountName: "",
+      accountNumber: 0,
+      bankName: "",
+      swiftCode: "",
+      iban: "",
+    });
+  };
 
   const [data, setData] = useState([]); // State to hold fetched data
   const [loading, setLoading] = useState(true); // State to handle loading
   const [error, setError] = useState(null);
+
+  const [searchText, setSearchText] = useState("");
+
+  const [formData, setFormData] = useState({
+    accountName: "",
+    accountNumber: 0,
+    bankName: "",
+    swiftCode: "",
+    iban: "",
+  });
+
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
@@ -76,22 +110,111 @@ function Payouts() {
           key: index, // Or use another unique identifier
         }));
         setData(formattedData);
-        // setData(res.data.result);
         setLoading(false);
       })
       .catch((err) => {
-        if (err.response && err.response.status === 401) {
+        if (err.response && err.response.status === 400) {
+          // Handle bad request error
+          setError(
+            new Error("Bad Request: Please check the request parameters.")
+          );
+        } else if (err.response && err.response.status === 401) {
           // Handle unauthorized error
           setError(new Error("Unauthorized access. Please log in again."));
           localStorage.removeItem("userInfo"); // Clear invalid token
-          // Optionally, redirect to the login page
         } else {
           setError(err);
         }
         setLoading(false);
       });
-    return () => {};
+    // return () => {};
   }, []);
+
+  const handleEdit = (record) => {
+    // Handle the edit action
+    // For example, you might want to show a modal with a form to edit the record
+    console.log("Edit record:", record);
+    setFormData({ ...record });
+    setIsEdit(true);
+    setOpen(true);
+  };
+
+  const handleDelete = (record) => {
+    // Handle the delete action
+    // You might want to show a confirmation modal and then perform the deletion
+    console.log("Delete record:", record);
+    console.log(record)
+
+    // Example delete API request
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    axios
+      .delete(
+        `http://localhost:5011/api/BankAccount/bankAccount/${record.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        // Remove the deleted record from the data state
+        setData(data.filter((item) => item.id !== record.id));
+      })
+      .catch((err) => {
+        console.error("Error deleting record:", err);
+      });
+  };
+
+  // post
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmitData = () => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    const request = isEdit
+      ? axios.patch(
+          `http://localhost:5011/api/BankAccount/bankAccount/${formData.id}`,
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+      : axios.post(
+          "http://localhost:5011/api/BankAccount/bankAccount/",
+          formData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+    request
+      .then((response) => {
+        if (isEdit) {
+          setData(
+            data.map((item) => (item.id === formData.id ? formData : item))
+          );
+        } else {
+          setData([...data, { ...response.data, key: data.length }]);
+        }
+        setOpen(false);
+        setFormData({
+          id: null,
+          name: "",
+          code: "",
+          discount: 0,
+          discountType: 1,
+          discountEnd: "",
+          time: "",
+        });
+      })
+      .catch((err) => {
+        console.error("Error submitting data:", err);
+      });
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -108,6 +231,14 @@ function Payouts() {
     const maskedPart = "****"; // Masking part
     return `${maskedPart}${visiblePart}`;
   };
+
+  const handleSearchByCouponNanme = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredData = data.filter((item) =>
+    item.bankName.toLowerCase().includes(searchText.toLowerCase())
+  );
   return (
     <>
       <div className={style.eventsPages}>
@@ -133,8 +264,10 @@ function Payouts() {
                   />
                 </InputLeftElement>
                 <Input
-                  type="tel"
-                  placeholder="Search by coupon name"
+                  type="text"
+                  value={searchText}
+                  onChange={handleSearchByCouponNanme}
+                  placeholder="Search by bank name"
                   style={{ border: "none", marginLeft: "25px" }}
                 />
               </InputGroup>
@@ -146,7 +279,7 @@ function Payouts() {
         </div>
 
         <div className={style.bankCards}>
-          {data?.map((elem, i) => {
+          {filteredData?.map((elem, i) => {
             return (
               <div key={i} className={style.card}>
                 <h2>{elem.bankName}</h2>
@@ -155,10 +288,13 @@ function Payouts() {
                 </h4>
                 <p>{maskAccountNumber(elem.accountNumber)}</p>
 
-                <button className={style.edit} onClick={handleOpen}>
+                <button className={style.edit} onClick={() => handleEdit(elem)}>
                   <FontAwesomeIcon icon={faPen} color="#717171" />
                 </button>
-                <button className={style.delete}>
+                <button
+                  className={style.delete}
+                  onClick={() => handleDelete(elem)}
+                >
                   <FontAwesomeIcon icon={faTrashCan} color="#717171" />
                 </button>
               </div>
@@ -199,7 +335,7 @@ function Payouts() {
                   padding: "15px",
                 }}
               >
-                Add Bank Account
+                {isEdit ? "Edit Account" : "Add Bank Account"}
               </Typography>
               <Typography
                 onClick={handleClose}
@@ -246,9 +382,9 @@ function Payouts() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    name="accountName"
+                    value={formData.accountName}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -271,9 +407,9 @@ function Payouts() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="price"
-                    // value={formsData.phone}
-                    // onChange={handleInputChange}
+                    name="accountNumber"
+                    value={formData.accountNumber}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -296,9 +432,9 @@ function Payouts() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    name="bankName"
+                    value={formData.bankName}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -306,32 +442,7 @@ function Payouts() {
                     }}
                   />
                 </Grid>
-                <Grid xs={12} md={6}>
-                  <Typography
-                    id="transition-modal-title"
-                    variant="h6"
-                    component="span"
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "5px",
-                    }}
-                  >
-                    BSB code*
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    name="discount"
-                    placeholder="XXY-ZZZ"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
-                    style={{
-                      margin: "8px",
-                      width: "100%",
-                      backgroundColor: "#f9f9f9",
-                    }}
-                  />
-                </Grid>
+
                 <Grid xs={12} md={6}>
                   <Typography
                     id="transition-modal-title"
@@ -347,9 +458,9 @@ function Payouts() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="price"
-                    // value={formsData.phone}
-                    // onChange={handleInputChange}
+                    name="swiftCode"
+                    value={formData.swiftCode}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -357,31 +468,7 @@ function Payouts() {
                     }}
                   />
                 </Grid>
-                <Grid xs={12} md={6}>
-                  <Typography
-                    id="transition-modal-title"
-                    variant="h6"
-                    component="span"
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "5px",
-                    }}
-                  >
-                    ABA Routing*
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    name="discount"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
-                    style={{
-                      margin: "8px",
-                      width: "100%",
-                      backgroundColor: "#f9f9f9",
-                    }}
-                  />
-                </Grid>
+
                 <Grid xs={12} md={12}>
                   <Typography
                     id="transition-modal-title"
@@ -397,9 +484,9 @@ function Payouts() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    name="iban"
+                    value={formData.iban}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -420,7 +507,9 @@ function Payouts() {
               <button onClick={handleClose} className={style.cancel}>
                 Cancel
               </button>
-              <button className={style.add}>Save</button>
+              <button className={style.add} onClick={handleSubmitData}>
+                {isEdit ? "Save" : "Add"}
+              </button>
             </div>
           </Box>
         </Fade>

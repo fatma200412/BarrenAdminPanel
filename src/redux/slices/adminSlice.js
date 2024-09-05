@@ -18,9 +18,9 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.isLogin = false;
       state.userInfo = {};
-      // localStorage.removeItem("token");
-      // localStorage.removeItem("roles");
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("isLoginAdmin");
+      localStorage.removeItem("userRole");
     },
   },
 });

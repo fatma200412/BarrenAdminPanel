@@ -49,7 +49,19 @@ function ContactList() {
   const [loading, setLoading] = useState(true); // State to handle loading
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const [formData, setFormData] = useState({
+    listName: "",
+    description: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    userId: 0,
+  });
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const fetchData = () => {
     const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
 
     if (!token) {
@@ -69,6 +81,17 @@ function ContactList() {
           ...item,
           key: index, // Or use another unique identifier
         }));
+        const highestUserId = Math.max(
+          ...formattedData.map((item) => item.id),
+          0
+        );
+
+        // Set the userId for new records to be highestUserId + 2
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          userId: highestUserId + 2,
+        }));
+
         setData(formattedData);
         // setData(res.data.result);
         setLoading(false);
@@ -84,7 +107,10 @@ function ContactList() {
         }
         setLoading(false);
       });
-    return () => {};
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -199,6 +225,7 @@ function ContactList() {
         text
       ),
   });
+
   const columns = [
     {
       title: "ID",
@@ -211,6 +238,7 @@ function ContactList() {
       dataIndex: "listName",
       key: "listName",
       width: "30%",
+      sorter: (a, b) => a?.listName?.localeCompare(b?.listName),
       ...getColumnSearchProps("listName"),
     },
     {
@@ -218,6 +246,7 @@ function ContactList() {
       dataIndex: "firstName",
       key: "firstName",
       width: "20%",
+      sorter: (a, b) => a?.firstName?.localeCompare(b?.firstName),
       ...getColumnSearchProps("firstName"),
     },
     {
@@ -225,6 +254,7 @@ function ContactList() {
       dataIndex: "lastName",
       key: "lastName",
       width: "20%",
+      sorter: (a, b) => a?.lastName?.localeCompare(b?.lastName),
       ...getColumnSearchProps("lastName"),
     },
     {
@@ -232,6 +262,8 @@ function ContactList() {
       dataIndex: "email",
       key: "email",
       width: "20%",
+      sorter: (a, b) => a?.email?.localeCompare(b?.email),
+
       ...getColumnSearchProps("email"),
     },
     {
@@ -273,52 +305,167 @@ function ContactList() {
         </Button>
       ),
     },
-    // {
-    //   title: "Address",
-    //   dataIndex: "address",
-    //   key: "address",
-    //   ...getColumnSearchProps("address"),
-    //   sorter: (a, b) => a.address.length - b.address.length,
-    //   sortDirections: ["descend", "ascend"],
-    // },
   ];
 
   const handleEdit = (record) => {
     // Handle the edit action
     // For example, you might want to show a modal with a form to edit the record
     console.log("Edit record:", record);
+    setFormData({ ...record });
+    setIsEdit(true);
+    setOpen(true);
   };
 
   const handleDelete = (record) => {
-    // Handle the delete action
-    // You might want to show a confirmation modal and then perform the deletion
     console.log("Delete record:", record);
 
-    // Example delete API request
-    // const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
-    // axios
-    //   .delete(`http://localhost:5011/api/Event/events/${record.id}`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   })
-    //   .then(() => {
-    //     // Remove the deleted record from the data state
-    //     setData(data.filter((item) => item.id !== record.id));
-    //   })
-    //   .catch((err) => {
-    //     console.error("Error deleting record:", err);
-    //   });
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+    axios
+      .delete(
+        `http://localhost:5011/api/ContactList/DeleteContactList/${record.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(() => {
+        setData(data.filter((item) => item.id !== record.id));
+      })
+      .catch((err) => {
+        console.error("Error deleting record:", err);
+      });
   };
 
+  const parseHtmlToText = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
   // modal
 
-  const [open, setOpen] = useState(false);
+  // post
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-  
+  const handleQuillChange = (value) => {
+    setFormData((prevState) => ({ ...prevState, description: value }));
+  };
+
+  const handleSubmitData = () => {
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.token;
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+    if (!isEdit) {
+      // Find the highest userId from the current data
+      const highestUserId = Math.max(...data.map((item) => item.id), 0);
+
+      console.log(+highestUserId + 2);
+      // Set the userId for the new record to be highestUserId + 2
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        userId: +highestUserId + 2,
+      }));
+    }
+
+    const dataToSubmit = {
+      ...formData,
+      description: parseHtmlToText(formData.description),
+    };
+    console.log(dataToSubmit);
+
+    const request = isEdit
+      ? axios.put(
+          `http://localhost:5011/api/ContactList/UpdateContactList/${formData.id}`,
+          dataToSubmit,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+      : axios.post(
+          "http://localhost:5011/api/ContactList/contactList",
+          dataToSubmit,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+    request
+      .then((response) => {
+        const updatedCoupon = response.data;
+        console.log("API Response:", updatedCoupon);
+
+        if (isEdit) {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.id === formData.id
+                ? { ...updatedCoupon, key: formData.id }
+                : item
+            )
+          );
+        } else {
+          // setData([...data, { ...updatedCoupon, key: data.length }]);
+          fetchData();
+        }
+        setOpen(false);
+        setFormData({
+          listName: "",
+          description: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          userId: 0,
+        });
+
+        // fetchData();
+        // setOpen(false);
+        // setFormData({
+        //   listName: "",
+        //   description: "",
+        //   firstName: "",
+        //   lastName: "",
+        //   email: "",
+        // });
+      })
+      .catch((err) => {
+        console.error("Error submitting data:", err.message);
+        if (err.response) {
+          console.error("Server Response Data:", err.response.data);
+          console.error("Server Response Status:", err.response.status);
+          console.error("Server Response Headers:", err.response.headers);
+        }
+      });
+  };
+
+  const handleOpen = () => {
+    setFormData({
+      listName: "",
+      description: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      userId: 0,
+    });
+    setOpen(true);
+    setIsEdit(false);
+  };
+  const handleClose = () => {
+    setFormData({
+      listName: "",
+      description: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+    });
+    setOpen(false);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -326,6 +473,14 @@ function ContactList() {
   if (error) {
     return <p>Error loading data: {error.message}</p>;
   }
+
+  const handleSearchByListName = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filteredData = data.filter((item) =>
+    item?.listName?.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <>
@@ -340,7 +495,7 @@ function ContactList() {
 
         <div className={style.eventsAndSearch}>
           <div className={style.title}>
-            <h5>Contact Lists (2)</h5>
+            <h5>Contact Lists ({filteredData.length})</h5>
           </div>
           <div className={style.searchAndBtns}>
             <div className={style.inputAndIcon}>
@@ -352,8 +507,10 @@ function ContactList() {
                   />
                 </InputLeftElement>
                 <Input
-                  type="tel"
+                  type="text"
                   placeholder="Search by name"
+                  value={searchText}
+                  onChange={handleSearchByListName}
                   style={{ border: "none", marginLeft: "25px" }}
                 />
               </InputGroup>
@@ -368,7 +525,7 @@ function ContactList() {
           {/* <CustomFilterDemo /> */}
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={filteredData}
             style={{ clear: "none" }}
           />
         </div>
@@ -406,7 +563,7 @@ function ContactList() {
                   padding: "12px",
                 }}
               >
-                Create New List
+                {isEdit ? "Edit List" : "Create New List"}
               </Typography>
 
               <Typography
@@ -452,9 +609,9 @@ function ContactList() {
               </Typography>
               <TextField
                 variant="outlined"
-                name="code"
-                // value={formsData.name}
-                // onChange={handleInputChange}
+                name="listName"
+                value={formData.listName}
+                onChange={handleInputChange}
                 style={{
                   margin: "8px",
                   width: "100%",
@@ -475,8 +632,9 @@ function ContactList() {
               </Typography>
               <ReactQuill
                 theme="snow"
-                value={description}
-                onChange={setDescription}
+                name="description"
+                value={formData.description}
+                onChange={handleQuillChange}
                 style={{
                   margin: "8px",
                   width: "100%",
@@ -527,9 +685,9 @@ function ContactList() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -552,9 +710,9 @@ function ContactList() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="price"
-                    // value={formsData.phone}
-                    // onChange={handleInputChange}
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -577,10 +735,10 @@ function ContactList() {
                   </Typography>
                   <TextField
                     variant="outlined"
-                    name="discount"
+                    name="email"
                     type="email"
-                    // value={formsData.email}
-                    // onChange={handleInputChange}
+                    value={formData.email}
+                    onChange={handleInputChange}
                     style={{
                       margin: "8px",
                       width: "100%",
@@ -601,7 +759,9 @@ function ContactList() {
               <button onClick={handleClose} className={style.cancel}>
                 Cancel
               </button>
-              <button className={style.add}>Add</button>
+              <button className={style.add} onClick={handleSubmitData}>
+                {isEdit ? "Save Changes" : "Add"}
+              </button>
             </div>
           </Box>
         </Fade>

@@ -185,39 +185,6 @@ function Dashboard() {
         </div>
 
         <div className={style.events}>
-          <div className={style.eventsHeader}>
-            <div className={style.times}>
-              <button>
-                <ChevronLeftIcon />
-              </button>
-              <button>
-                <ChevronRightIcon />
-              </button>
-              <p>
-                <span>1st April, 2022</span> - <span>30th April, 2022</span>{" "}
-              </p>
-            </div>
-            <div className={style.selectEvents}>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Selected Events
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={selectEvents}
-                  onChange={handleChangeSelectEvents}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-          </div>
           <div className={style.eventsCards}>
             <Grid container spacing={2}>
               <Grid item xs={12} lg={3} md={6} sm={12}>
@@ -803,4 +770,4 @@ function Dashboard() {
   );
 }
 
-export  {Dashboard};
+export { Dashboard };

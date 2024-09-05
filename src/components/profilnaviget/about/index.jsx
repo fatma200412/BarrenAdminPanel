@@ -26,7 +26,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LanguageIcon from "@mui/icons-material/Language";
-
+import axios from "axios";
 const styleModal = {
   position: "absolute",
   top: "50%",
@@ -55,10 +55,9 @@ function AboutProfil() {
     about: "",
     email: "",
     phone: "",
-    address: {
-      country: "",
-      city: "",
-    },
+
+    country: "",
+    city: "",
   });
 
   const handleOpen = () => setOpen(true);
@@ -206,7 +205,7 @@ function AboutProfil() {
         <div className={style.address}>
           <h3>Address</h3>
           <p>
-            {user?.address?.address} ,{user?.address?.city} ,{user?.address?.county}{" "}
+            {user?.addres} ,{user?.city} ,{user?.country}{" "}
           </p>
         </div>
       </div>
@@ -504,7 +503,7 @@ function AboutProfil() {
                     </Typography>
                     <TextField
                       name="address"
-                      value={formsData.address.address}
+                      value={formsData.address}
                       onChange={handleAddressChange}
                       variant="outlined"
                       style={{
@@ -530,7 +529,7 @@ function AboutProfil() {
                     </Typography>
                     <TextField
                       name="country"
-                      value={formsData.address.country}
+                      value={formsData.country}
                       onChange={handleAddressChange}
                       variant="outlined"
                       style={{
@@ -555,7 +554,7 @@ function AboutProfil() {
                     </Typography>
                     <TextField
                       name="country"
-                      value={formsData.address.country}
+                      value={formsData.city}
                       onChange={handleAddressChange}
                       variant="outlined"
                       style={{

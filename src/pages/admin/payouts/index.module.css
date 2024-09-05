@@ -73,6 +73,7 @@
   flex-wrap: wrap;
 }
 .eventsPages .bankCards .card {
+  min-width: 250px;
   border: 1px solid rgb(197, 189, 189);
   padding: 15px 20px;
   padding-right: 100px;

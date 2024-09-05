@@ -1,0 +1,78 @@
+.nav {
+  width: 100%;
+  /* background-color: #d2f2f1; */
+  background-image: url("https://www.gambolthemes.net/html-items/barren-html/disable-demo-link/images/banner.jpg");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.nav nav {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+}
+.nav nav .navlink {
+  font-size: 14px;
+  color: #6ac045;
+}
+.nav nav .navLink .link {
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none solid rgb(106, 192, 69);
+}
+.errPage {
+  padding: 100px;
+  margin: 0 auto;
+  width: 100%;
+}
+.errPage .title {
+  width: 50%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.errPage .title .heading {
+  color: #212529;
+  font-size: 130px;
+  font-weight: 800;
+  text-decoration: none solid rgb(33, 37, 41);
+  margin-bottom: 10px;
+}
+.errPage .title .paraqraf {
+  color: #212529;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: none solid rgb(33, 37, 41);
+  margin-bottom: 30px;
+}
+.errPage .title .errorTitle {
+  color: #717171;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none solid rgb(113, 113, 113);
+  text-align: center;
+  margin-bottom: 40px;
+}
+.errPage .title .btnBack button {
+  background-color: #6ac045;
+  padding: 18px 30px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+}
+.errPage .title .btnBack button:hover {
+  background-color: #7ad254;
+}
+.errPage .title .btnBack button .link {
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none solid rgb(255, 255, 255);
+  padding-right: 10px;
+}

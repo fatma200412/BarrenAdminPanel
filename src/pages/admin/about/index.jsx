@@ -66,10 +66,9 @@ function About() {
     about: "",
     email: "",
     phone: "",
-    address: {
-      country: "",
-      city: "",
-    },
+    address: "",
+    country: "",
+    city: "",
   });
 
   const handleOpen = () => setOpen(true);
@@ -209,11 +208,9 @@ function About() {
           <div className={style.address}>
             <h3>Address</h3>
             <p>
-              {user.address.address} ,{user.address.city} ,{user.address.county}{" "}
+              {user.addres} ,{user.city} ,{user.country}
             </p>
           </div>
-
-          
         </div>
       </div>
       <div>
