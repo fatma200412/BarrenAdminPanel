@@ -111,6 +111,8 @@ function Header({ toggleNavbar, isNavbarOpen }) {
     });
   }
 
+  const userRoles = JSON.parse(localStorage.getItem("userInfo")).roles;
+
   return (
     <>
       <header className={style.header}>
@@ -142,16 +144,20 @@ function Header({ toggleNavbar, isNavbarOpen }) {
                 >
                   <ExploreIcon /> Explore Events
                 </a>
-                <Link to="/createNewEvent" className={style.calendar}>
-                  <CalendarMonthIcon
-                    style={{
-                      marginRight: "10px",
-                      fontSize: "20px",
-                      color: "white",
-                    }}
-                  />
-                  Create Events
-                </Link>
+                {userRoles.includes("organizer") && (
+                  <>
+                    <Link to="/createNewEvent" className={style.calendar}>
+                      <CalendarMonthIcon
+                        style={{
+                          marginRight: "10px",
+                          fontSize: "20px",
+                          color: "white",
+                        }}
+                      />
+                      Create Events
+                    </Link>
+                  </>
+                )}
               </div>
               <div className={style.btns}>
                 <button

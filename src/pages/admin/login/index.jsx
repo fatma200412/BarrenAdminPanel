@@ -66,10 +66,12 @@ function Login() {
           dispatch(login(userInfo));
 
           setIsLoginAdmin(true);
-          setUserRole("admin");
+          let userRole = JSON.parse(localStorage.getItem("userInfo")).roles;
+          console.log("userRole", userRole);
+          setUserRole(userRole);
 
           localStorage.setItem("isLoginAdmin", true);
-          localStorage.setItem("userRole", "admin");
+          localStorage.setItem("userRole", JSON.stringify(userRole.join(",")));
 
           navigate("/admin");
         } else {

@@ -12,7 +12,7 @@ const router = createBrowserRouter(routes);
 function App() {
   const [isLoginAdmin, setIsLoginAdmin] = useState(false);
 
-  const [userRole, setUserRole] = useState(''); // Example, replace with your logic
+  const [userRole, setUserRole] = useState(''); 
 
   const authContextValue = {
     isLoginAdmin,

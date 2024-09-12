@@ -8,7 +8,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   useEffect(() => {
     // debugger;
-    // Load login state and role from localStorage if available
+    // debugger;
     const storedIsLoginAdmin = localStorage.getItem("isLoginAdmin") === "true";
     const storedUserRole = localStorage.getItem("userRole");
 

@@ -33,18 +33,16 @@ function CreateOnlineAndVenueEvent() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [detailsFormData, setDetailsFormData] = useState({
-    name: "",
-    categoryName: "",
+    Name: "",
+    eventCategoryId: "",
     eventDate: "",
     beginTime: "",
     endTime: "",
-    image: {
-      imageUrl: null,
-      description: "",
-    },
-    addres: "",
-    city: "",
-    country: "",
+    imageUrl: null,
+    Description: "",
+    Addres: "",
+    City: "",
+    Country: "",
     eventTypeId: eventType === "online" ? 1 : 2,
   });
   const [eventId, setEventId] = useState(null);
@@ -233,7 +231,7 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
   const handleCategoryChange = (event) => {
     setDetailsFormData((prevData) => ({
       ...prevData,
-      categoryName: event.target.value,
+      eventCategoryId: event.target.value,
     }));
   };
 
@@ -261,7 +259,7 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
     }));
   };
   const handleQuillChange = (value) => {
-    setDetailsFormData((prevState) => ({ ...prevState, description: value }));
+    setDetailsFormData((prevState) => ({ ...prevState, Description: value }));
   };
 
   return (
@@ -330,9 +328,9 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
               <TextField
                 variant="outlined"
                 placeholder="Enter event name here"
-                name="name"
+                name="Name"
                 type="text"
-                value={detailsFormData.name}
+                value={detailsFormData.Name}
                 onChange={handleInputChange}
                 style={{
                   marginBottom: "8px",
@@ -392,7 +390,7 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
                   }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={detailsFormData.categoryName}
+                  value={detailsFormData.eventCategoryId}
                   onChange={handleCategoryChange}
                 >
                   <MenuItem value={"1"}>Arts</MenuItem>
@@ -620,8 +618,8 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
               </Typography>
               <ReactQuill
                 theme="snow"
-                name="description"
-                value={detailsFormData.description}
+                name="Description"
+                value={detailsFormData.Description}
                 onChange={handleQuillChange}
                 style={{
                   margin: "8px",
@@ -675,8 +673,8 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
               </Typography>
               <TextField
                 variant="outlined"
-                name="country"
-                value={detailsFormData.country}
+                name="Country"
+                value={detailsFormData.Country}
                 onChange={handleInputChange}
                 style={{
                   margin: "8px",
@@ -700,8 +698,8 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
               </Typography>
               <TextField
                 variant="outlined"
-                name="city"
-                value={detailsFormData.city}
+                name="City"
+                value={detailsFormData.City}
                 onChange={handleInputChange}
                 style={{
                   margin: "8px",
@@ -725,8 +723,8 @@ function DetailsForm({ detailsFormData, setDetailsFormData }) {
               </Typography>
               <TextField
                 variant="outlined"
-                name="addres"
-                value={detailsFormData.addres}
+                name="Addres"
+                value={detailsFormData.Addres}
                 onChange={handleInputChange}
                 style={{
                   margin: "8px",

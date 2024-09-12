@@ -19,14 +19,41 @@ function Register() {
     lastName: "",
     email: "",
     password: "",
-    image: "",
-    address: {
-      county: "",
-      city: "",
-      address: "",
-    },
+    country: "",
+    city: "",
+    addres: "",
+    userType: 2,
   };
   const navigate = useNavigate();
+
+  const handleRegisterSubmit = (values, actions) => {
+    console.log(values);
+    axios.post("http://localhost:5011/api/Auth/SignUp", values).then((res) => {
+      {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Registration completed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      if (res.status == 200) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Registration completed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        // alert("Qeydiyyat tamamlandir");
+        navigate("/");
+        actions.resetForm();
+      }
+      navigate("/");
+      actions.resetForm();
+    });
+  };
   return (
     <>
       <div className={style.registerPages}>
@@ -54,32 +81,7 @@ function Register() {
 
             <Formik
               initialValues={initialValues}
-              onSubmit={(values, actions) => {
-                console.log(values);
-                axios
-                  .post(
-                    "https://669b5625276e45187d352b89.mockapi.io/users",
-                    values
-                  )
-                  .then((res) => {
-                    {
-                      Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Registration completed successfully",
-                        showConfirmButton: false,
-                        timer: 1500,
-                      });
-                    }
-                    if (res.status == 200) {
-                      alert("qey tamamlandir");
-                      navigate("/");
-                      actions.resetForm();
-                    }
-                    navigate("/");
-                    actions.resetForm();
-                  });
-              }}
+              onSubmit={handleRegisterSubmit}
             >
               <Form className={style.form}>
                 <Grid container spacing={3}>
@@ -128,23 +130,12 @@ function Register() {
                     />
                   </Grid>
                   <Grid xs={12} md={12}>
-                    <label htmlFor="image" className={style.label}>
-                      Profil Image*
-                    </label>
-                    <Field
-                      id="image"
-                      name="image"
-                      placeholder="Your Profil Image"
-                      className={style.inp}
-                    />
-                  </Grid>{" "}
-                  <Grid xs={12} md={12}>
-                    <label htmlFor="county" className={style.label}>
+                    <label htmlFor="country" className={style.label}>
                       Your County*
                     </label>
                     <Field
                       id="county"
-                      name="address.county"
+                      name="country"
                       placeholder="Your County"
                       className={style.inp}
                     />
@@ -155,18 +146,18 @@ function Register() {
                     </label>
                     <Field
                       id=""
-                      name="address.city"
+                      name="city"
                       placeholder="Your City"
                       className={style.inp}
                     />
                   </Grid>{" "}
                   <Grid xs={12} md={12}>
-                    <label htmlFor="address" className={style.label}>
+                    <label htmlFor="addres" className={style.label}>
                       Your address*
                     </label>
                     <Field
                       id="address"
-                      name="address.address"
+                      name="addres"
                       placeholder="Your Address"
                       className={style.inp}
                     />

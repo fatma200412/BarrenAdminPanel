@@ -299,7 +299,7 @@ function Reports() {
               Payouts (1)
             </button>
           </div>
-          <div className={style.searchAndBtns}>
+          {/* <div className={style.searchAndBtns}>
             <div className={style.inputAndIcon}>
               <InputGroup className={style.input}>
                 <InputLeftElement pointerEvents="none">
@@ -382,7 +382,7 @@ function Reports() {
                 </FormControl>
               </Grid>
             </Grid>
-          </div>
+          </div> */}
         </div>
 
         <div className={style.dataTables}>

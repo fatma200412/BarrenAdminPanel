@@ -23,31 +23,40 @@ export const routes = [
       {
         path: "/admin",
         element: (
-          <ProtectedRoute element={<Dashboard />} allowedRoles={["admin"]} />
+          <ProtectedRoute
+            element={<Dashboard />}
+            allowedRoles={["organizer"]}
+          />
         ),
       },
       {
         path: "/admin/events",
         element: (
-          <ProtectedRoute element={<Events />} allowedRoles={["admin"]} />
+          <ProtectedRoute element={<Events />} allowedRoles={["organizer"]} />
         ),
       },
       {
         path: "/admin/promotion",
         element: (
-          <ProtectedRoute element={<Promotion />} allowedRoles={["admin"]} />
+          <ProtectedRoute
+            element={<Promotion />}
+            allowedRoles={["organizer"]}
+          />
         ),
       },
       {
         path: "/admin/contactList",
         element: (
-          <ProtectedRoute element={<ContactList />} allowedRoles={["admin"]} />
+          <ProtectedRoute
+            element={<ContactList />}
+            allowedRoles={["organizer"]}
+          />
         ),
       },
       {
         path: "/admin/payouts",
         element: (
-          <ProtectedRoute element={<Payouts />} allowedRoles={["admin"]} />
+          <ProtectedRoute element={<Payouts />} allowedRoles={["organizer"]} />
         ),
       },
       {
@@ -60,7 +69,10 @@ export const routes = [
       {
         path: "/admin/about",
         element: (
-          <ProtectedRoute element={<About />} allowedRoles={["admin"]} />
+          <ProtectedRoute
+            element={<About />}
+            allowedRoles={["admin", "organizer"]}
+          />
         ),
       },
     ],

@@ -177,11 +177,11 @@ function Dashboard() {
               <p>My Organisation</p>
             </div>
           </div>
-          <div className={style.orgaBtn}>
+          {/* <div className={style.orgaBtn}>
             <button onClick={handleOpen}>
               <span>+</span> Add Organisation
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className={style.events}>
